@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <httpProtocol>
+      <customHeaders>
+        <add name="Access-Control-Allow-Origin" value="*" />
+        <add name="Access-Control-Allow-Headers" value="Content-Type" />
+        <add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE, OPTIONS" />
+      </customHeaders>
+ </httpProtocol>
+    <meta charset="utf-8">
+    <title>Tibi Cobzaru</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="img/logo.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+	
+	<!-- email service -->
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="51">
+    <!-- Navbar Start -->
+    <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
+        <a href="index.html" class="navbar-brand ml-lg-3">
+            <h1 class="m-0 display-5"><span class="text-primary">Tibi</span>Cobzaru</h1>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse px-lg-3" id="navbarCollapse">
+            <div class="navbar-nav m-auto py-0">
+                <a href="#home" class="nav-item nav-link active">Home</a>
+                <a href="#about" class="nav-item nav-link">About</a>
+                <a href="#qualification" class="nav-item nav-link">Ed&Xp</a>
+                <a href="#skill" class="nav-item nav-link">Skills</a>
+                <a href="#service" class="nav-item nav-link">Services</a>
+                <a href="#contact" class="nav-item nav-link">Contact</a>
+            </div>
+            
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary d-flex align-items-center mb-5 py-5" id="home" style="min-height: 100vh;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 px-4 pl-lg-0 pb-4 pb-lg-0">
+                    
+                </div>
+                <div class="col-lg-5 text-center text-lg-left">
+                    <h3 class="text-white font-weight-normal mb-3">Hi, I'm</h3>
+                    <h1 class="display-3 text-uppercase text-primary mb-2" style="-webkit-text-stroke: 2px #ffffff;">Tibi</h1>
+                    <h1 class="typed-text-output d-inline font-weight-lighter text-white"></h1>
+                    <div class="typed-text d-none"> RPA, Marketing, UI/UX, React JS, Business Consulting, Business Analysis</div>
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
+                        <a class="btn btn-outline-light mr-5" onClick="document.getElementById('about').scrollIntoView()">Get to know me</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid py-5" id="about">
+        <div class="container">
+            <div class="position-relative d-flex align-items-center justify-content-center">
+                <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">About</h1>
+                <h1 class="position-absolute text-uppercase text-primary">About</h1>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-3 px-3 pl-lg-0 pb-3 pb-lg-0">
+                    
+                </div>
+                <div class="col-lg-7">
+                    <h3 class="mb-4">RPA x Marketing x Product </h3>
+                    <p>Results-oriented individual with a background in sociology, business and tech.<br> Interests towards innovation and product management.<br> Sometimes fun.</p>
+                    <div class="row mb-3">
+                        <div class="col-sm-6 py-2"><h6>Name: <span class="text-secondary">Tiberiu-Marian Cobzaru</span></h6></div>
+                   
+                        <div class="col-sm-6 py-2"><h6>Degree: <span class="text-secondary">Bachelor's in Human Resources</span></h6></div>
+                        <div class="col-sm-6 py-2"><h6>Experience: <span class="text-secondary">4+ years</span></h6></div>
+                        <div class="col-sm-6 py-2"><h6>Email: <span class="text-secondary">cobtiberiu@gmail.com</span></h6></div>
+                        <div class="col-sm-6 py-2"><h6>Location: <span class="text-secondary">Remote in EEA</span></h6></div>
+                        
+                    </div>
+                    <button class="btn btn-outline-primary mr-4" onClick="document.getElementById('contact').scrollIntoView()">Hire Me</button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Qualification Start -->
+    <div class="container-fluid py-5" id="qualification">
+        <div class="container">
+            <div class="position-relative d-flex align-items-center justify-content-center">
+                <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Quality</h1>
+                <h1 class="position-absolute text-uppercase text-primary">Education & Expericence</h1>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h3 class="mb-4">Education</h3>
+                    <div class="border-left border-primary pt-2 pl-4 ml-2">
+                        <div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Bachelor's in Human Resources (Sociology)</h5>
+                            <p class="mb-2"><strong>University of Bucharest</strong><small></small></p>
+                           </div>
+                        <div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Cambridge As Level in Business</h5>
+                            <p class="mb-2"><strong>Cambridge International Assessment</strong>  <small></small></p>
+                            
+                        </div>
+						<div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Computer Science dropout</h5>
+                            <p class="mb-2"><strong>University Al. I. Cuza Iasi</strong>  <small></small></p>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="mb-4">Expericence</h3>
+                    <div class="border-left border-primary pt-2 pl-4 ml-2">
+                        <div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Discover | Development Agent</h5>
+                            <p class="mb-2"><strong>Vodafone Romania</strong> <small></small></p>
+                            <p>Management Trainee in Discover Graduate Programme. Had 3 and a half rotations: in Consumer Value Management - as Data Analyst, Shadowing with CBU Director - as Business Analyst&Consultant, in Public Procurement, in RPA (ongoing) </p>
+                        </div>
+                        <div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Audit Analyst</h5>
+                            <p class="mb-2"><strong>Deloitte RADC</strong>  <small></small></p>
+                            <p></p>
+                        </div>
+                        <div class="position-relative mb-4">
+                            <i class="far fa-dot-circle text-primary position-absolute" style="top: 2px; left: -32px;"></i>
+                            <h5 class="font-weight-bold mb-1">Founder & Co-Founder in early stage tech startups</h5>
+                            <p class="mb-2"><strong>QuickrMoto (Uber with E-Motorcycles), Connsense (Platform for smart home systems)</strong>  <small></small></p>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Qualification End -->
+
+
+    <!-- Skill Start -->
+    <div class="container-fluid py-5" id="skill">
+        <div class="container">
+            <div class="position-relative d-flex align-items-center justify-content-center">
+                <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Skills</h1>
+                <h1 class="position-absolute text-uppercase text-primary">Skills</h1>
+            </div>
+            <div class="row align-items-center">
+			<div class="col-lg-3 px-3 pl-lg-0 pb-3 pb-lg-0">
+                    
+                </div>
+                <div class="col-md-2">
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> HTML</h6>
+                            
+                        </div>
+             
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> CSS</h6>
+                           
+                        </div>
+                        
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> JavaScript</h6>
+                           
+                        </div>
+                        
+                    </div>
+					
+					<div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> React JS</h6>    
+                        </div>
+                    </div>
+                </div>
+				
+                <div class="col-md-3">
+                    <div class="skill mb-4">
+						
+                        <div class="d-flex justify-content-between">
+							
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-map-signs text-primary"></i> Business Consulting</h6>
+                           
+                        </div>
+                        
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-chart-bar text-primary"></i> Business Analysis</h6>
+                           
+                        </div>
+                       
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> Robot Process Automation</h6>    
+                        </div>
+                    </div>
+					
+					<div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-code text-primary"></i> VBA</h6>    
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="col-md-3">
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-expand text-primary"></i> Axure</h6>
+                           
+                        </div>
+                        
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-images text-primary"></i> Photoshop</h6>
+                           
+                        </div>
+                       
+                    </div>
+                    <div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-bullhorn text-primary"></i> Meta/Google Ads</h6>    
+                        </div>
+                    </div>
+					
+					<div class="skill mb-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-bold"><i class="fa fa-1x fa-layer-group text-primary"></i> Adobe XD/ Figma</h6>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Skill End -->
+
+
+    <!-- Services Start -->
+    <div class="container-fluid pt-5" id="service">
+        <div class="container">
+            <div class="position-relative d-flex align-items-center justify-content-center">
+                <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Service</h1>
+                <h1 class="position-absolute text-uppercase text-primary">Services</h1>
+            </div>
+            <div class="row pb-3">
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        
+                        <i class="fa fa-2x fa-cogs service-icon bg-primary text-white mr-3"></i>
+						
+						<h4 class="font-weight-bold m-0">Business Automation</h4>
+                    </div>
+                    <p>Custom crafted solution for your unique business need. Delivered as an RPA workflow, Webapp or Macro. Includes documentation and assistance in setup. </p>
+                    
+                </div>
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <i class="fa fa-2x fa-map-signs service-icon bg-primary text-white mr-3"></i>
+                        <h4 class="font-weight-bold m-0">Business Consulting</h4>
+                    </div>
+                    <p>Let's find together the approach which aligns with your business goals. The main focus is on blue ocean exploration and strategy development.</p>
+                    
+                </div>
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <i class="fa fa-2x fa-search service-icon bg-primary text-white mr-3"></i>
+                        <h4 class="font-weight-bold m-0">Business Analysis</h4>
+                    </div>
+                    <p>PowerBi dashboards, on-field data collection through interviews, executive-level presentations (insights, pitch, slides).</p>
+                   
+                </div>
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <i class="fa fa-2x fa-rocket service-icon bg-primary text-white mr-3"></i>
+                        <h4 class="font-weight-bold m-0">Product Innovation</h4>
+                    </div>
+                    <p>Need a new feauture to delight your users? Let's explore what you're working with and we'll get there with focus on product differentiation.</p>
+                    
+                </div>
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <i class="fa fa-2x fa-compass service-icon bg-primary text-white mr-3"></i>
+                        <h4 class="font-weight-bold m-0">Marketing & Branding</h4>
+                    </div>
+                    <p>Improve customer experience, buyer persona, brand coherence, tone of voice, price, packaging and placement.</p>
+                
+                </div>
+                <div class="col-lg-4 col-md-6 text-center mb-5">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
+                        <i class="fa fa-2x fa-file-video service-icon bg-primary text-white mr-3"></i>
+                        <h4 class="font-weight-bold m-0">Video Post-Production</h4>
+                    </div>
+                    <p>Get a visual story from your footage. Includes sound design, color grading and we'll work with revisions.</p>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services End -->
+
+
+
+	
+	<!-- Contact Section Start -->
+	<div class="container-fluid " id="portfolio">
+        <div class="container">
+            <div class="position-relative d-flex align-items-center justify-content-center">
+                <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Contact</h1>
+                <h1 class="position-absolute text-uppercase text-primary">Contact</h1>
+            </div>
+			<!--Filters Start -->
+            <div class="row">
+                <div class="col-12 text-center mb-2">
+                    <ul class="list-inline mb-4" id="portfolio-flters">
+                        <li class="btn btn-sm btn-outline-primary m-1" data-filter=".first">Schedule</li>
+                        <li class="btn btn-sm btn-outline-primary m-1" data-filter=".second">Form</li>
+                    </ul>
+                </div>
+            </div>
+			<!--Filters End-->
+            <div class="portfolio-container ">
+                <div class=" portfolio-item first contact-way">
+                    <div class="position-relative d-flex align-items-center">
+
+						<!-- Schedule Contact Start -->
+						<div class="container-fluid py-5" id="contact">
+							<div class="container">								
+								
+								<!-- Calendly inline widget begin -->
+									<div class="calendly-inline-widget" data-url="https://calendly.com/tiberiucobzaru/explore?primary_color=0cceaf" style="min-width:320px;height:700px;"></div>
+									<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+								<!-- Calendly inline widget end -->		
+								
+							</div>
+						</div>
+						<!-- Schedule Contact End -->		
+				</div>
+			</div>
+				<div class="portfolio-item second contact-way">
+					<div class="position-relative overflow-hidden ">		
+							<!-- Contact Form Start -->
+							<div class="row justify-content-center">
+								<div class="col-lg-8">
+									<div class="contact-form text-center">
+										<div id="success"></div>
+										<form name="sentMessage" id="contactForm" novalidate="novalidate">
+											<div class="form-row">
+												<div class="control-group col-sm-6">
+													<input type="text" class="form-control p-4" id="name" placeholder="Your Name"
+														required="required" data-validation-required-message="Please enter your name" />
+													<p class="help-block text-danger"></p>
+												</div>
+												<div class="control-group col-sm-6">
+													<input type="email" class="form-control p-4" id="email" placeholder="Your Email"
+														required="required" data-validation-required-message="Please enter your email" />
+													<p class="help-block text-danger"></p>
+												</div>
+											</div>
+											<div class="control-group">
+												<input type="text" class="form-control p-4" id="subject" placeholder="Subject"
+													required="required" data-validation-required-message="Please enter a subject" />
+												<p class="help-block text-danger"></p>
+											</div>
+											<div class="control-group">
+												<textarea class="form-control py-3 px-4" rows="5" id="message" placeholder="Message"
+													required="required"
+													data-validation-required-message="Please enter your message"></textarea>
+												<p class="help-block text-danger"></p>
+											</div>
+											<div>
+												<button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send
+													Message</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+							<!-- Contact Form End -->
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+	<!-- Contact Section Start -->
+
+    <!-- Footer Start -->
+	
+    <div class="container-fluid bg-primary text-white mt-5 py-5 px-sm-3 px-md-5">
+        
+		<div class="container text-center py-5">
+		
+			<h1><span class="text-white">Tibi</span>Cobzaru</h1>
+			
+            <div class="d-flex justify-content-center mb-4">
+				
+                <a class="btn btn-light btn-social mr-2" href="https://www.linkedin.com/in/cobtiberiu" target="blank_"><i class="fab fa-linkedin-in"></i></a>
+        <!--        <a class="btn btn-light btn-social mr-2" href="https://github.com/cobtiberiu" target="blank_"><i class="fab fa-github"></i></a>
+		-->		
+            </div>
+			<div class="d-flex justify-content-center mb-3">
+                <a class="text-white"  onClick="document.getElementById('home').scrollIntoView()">Home</a>
+                <span class="px-3">|</span>
+                <a class="text-white"  onClick="document.getElementById('about').scrollIntoView()">About</a>
+                <span class="px-3">|</span>
+                <a class="text-white" onClick="document.getElementById('qualification').scrollIntoView()">Ed&Xp</a>
+                <span class="px-3">|</span>
+                <a class="text-white" onClick="document.getElementById('skill').scrollIntoView()">Skills</a>
+				<span class="px-3">|</span>
+                <a class="text-white" onClick="document.getElementById('service').scrollIntoView()">Services</a>
+				<span class="px-3">|</span>
+                <a class="text-white"onClick="document.getElementById('contact').scrollIntoView()">Contact</a>
+            </div>
+            <p class="m-0">&copy; <a class="text-white font-weight-bold" href="#">Tiberiu Cobzaru</a>.  I have no rights. *Website was built on top of free templates.
+            </p>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+    <!-- Scroll to Bottom -->
+    <i class="fa fa-2x fa-angle-down text-white scroll-to-bottom"></i>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-outline-dark px-0 back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/typed/typed.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+	
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
