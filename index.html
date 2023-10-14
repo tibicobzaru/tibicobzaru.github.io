@@ -2,13 +2,6 @@
 <html lang="en">
 
 <head>
- <httpProtocol>
-      <customHeaders>
-        <add name="Access-Control-Allow-Origin" value="*" />
-        <add name="Access-Control-Allow-Headers" value="Content-Type" />
-        <add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE, OPTIONS" />
-      </customHeaders>
- </httpProtocol>
     <meta charset="utf-8">
     <title>Tibi Cobzaru</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -32,10 +25,12 @@
 	
 	<!-- email service -->
 	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
-    <!-- Navbar Start -->
+
+	<!-- Navbar Start -->
     <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
         <a href="index.html" class="navbar-brand ml-lg-3">
             <h1 class="m-0 display-5"><span class="text-primary">Tibi</span>Cobzaru</h1>
@@ -100,11 +95,11 @@
                    
                         <div class="col-sm-6 py-2"><h6>Degree: <span class="text-secondary">Bachelor's in Human Resources</span></h6></div>
                         <div class="col-sm-6 py-2"><h6>Experience: <span class="text-secondary">4+ years</span></h6></div>
-                        <div class="col-sm-6 py-2"><h6>Email: <span class="text-secondary">cobtiberiu@gmail.com</span></h6></div>
+                        <div class="col-sm-6 py-2"><h6>Email: <span class="text-secondary">tibicobzaru@outlook.com</span></h6></div>
                         <div class="col-sm-6 py-2"><h6>Location: <span class="text-secondary">Remote in EEA</span></h6></div>
                         
                     </div>
-                    <button class="btn btn-outline-primary mr-4" onClick="document.getElementById('contact').scrollIntoView()">Hire Me</button>
+                    <button class="btn btn-outline-primary mr-4" onClick="document.getElementById('portfolio').scrollIntoView()">Hire Me</button>
                    
                 </div>
             </div>
@@ -120,6 +115,7 @@
                 <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Quality</h1>
                 <h1 class="position-absolute text-uppercase text-primary">Education & Expericence</h1>
             </div>
+			
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <h3 class="mb-4">Education</h3>
@@ -355,8 +351,9 @@
                 <div class="col-12 text-center mb-2">
                     <ul class="list-inline mb-4" id="portfolio-flters">
                         <li class="btn btn-sm btn-outline-primary m-1" data-filter=".first">Schedule</li>
-                        <li class="btn btn-sm btn-outline-primary m-1" data-filter=".second">Form</li>
-                    </ul>
+						<li class="font-weight-bold m-1" style="display: inline-block"> or </li>
+                        <li class="m-1"style="display: inline-block" data-filter=".second"><a href="mailto:tibicobzaru@outlook.com" class="btn btn-sm btn-outline-primary m-1"> Mail <span> tibicobzaru@outlook.com </span> </a></li>					
+					</ul>
                 </div>
             </div>
 			<!--Filters End-->
@@ -369,10 +366,10 @@
 							<div class="container">								
 								
 								<!-- Calendly inline widget begin -->
-									<div class="calendly-inline-widget" data-url="https://calendly.com/tiberiucobzaru/explore?primary_color=0cceaf" style="min-width:320px;height:700px;"></div>
-									<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-								<!-- Calendly inline widget end -->		
-								
+								<div class="calendly-inline-widget" data-url="https://calendly.com/tibicobzaru/explore?hide_gdpr_banner=1&text_color=36454f&primary_color=0cceaf" style="min-width:320px;height:700px;"></div>
+								<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+								<!-- Calendly inline widget end -->
+
 							</div>
 						</div>
 						<!-- Schedule Contact End -->		
@@ -383,38 +380,7 @@
 							<!-- Contact Form Start -->
 							<div class="row justify-content-center">
 								<div class="col-lg-8">
-									<div class="contact-form text-center">
-										<div id="success"></div>
-										<form name="sentMessage" id="contactForm" novalidate="novalidate">
-											<div class="form-row">
-												<div class="control-group col-sm-6">
-													<input type="text" class="form-control p-4" id="name" placeholder="Your Name"
-														required="required" data-validation-required-message="Please enter your name" />
-													<p class="help-block text-danger"></p>
-												</div>
-												<div class="control-group col-sm-6">
-													<input type="email" class="form-control p-4" id="email" placeholder="Your Email"
-														required="required" data-validation-required-message="Please enter your email" />
-													<p class="help-block text-danger"></p>
-												</div>
-											</div>
-											<div class="control-group">
-												<input type="text" class="form-control p-4" id="subject" placeholder="Subject"
-													required="required" data-validation-required-message="Please enter a subject" />
-												<p class="help-block text-danger"></p>
-											</div>
-											<div class="control-group">
-												<textarea class="form-control py-3 px-4" rows="5" id="message" placeholder="Message"
-													required="required"
-													data-validation-required-message="Please enter your message"></textarea>
-												<p class="help-block text-danger"></p>
-											</div>
-											<div>
-												<button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send
-													Message</button>
-											</div>
-										</form>
-									</div>
+									
 								</div>
 							</div>
 							<!-- Contact Form End -->
@@ -431,7 +397,7 @@
         
 		<div class="container text-center py-5">
 		
-			<h1><span class="text-white">Tibi</span>Cobzaru</h1>
+			<h1 style= "cursor: pointer; " onClick="document.getElementById('home').scrollIntoView()"><span class="text-white" >Tibi</span>Cobzaru</h1> 
 			
             <div class="d-flex justify-content-center mb-4">
 				
@@ -440,17 +406,17 @@
 		-->		
             </div>
 			<div class="d-flex justify-content-center mb-3">
-                <a class="text-white"  onClick="document.getElementById('home').scrollIntoView()">Home</a>
+                <a class="text-white"  style= "cursor: pointer;" onClick="document.getElementById('home').scrollIntoView()">Home</a>
                 <span class="px-3">|</span>
-                <a class="text-white"  onClick="document.getElementById('about').scrollIntoView()">About</a>
+                <a class="text-white"  style= "cursor: pointer;" onClick="document.getElementById('about').scrollIntoView()">About</a>
                 <span class="px-3">|</span>
-                <a class="text-white" onClick="document.getElementById('qualification').scrollIntoView()">Ed&Xp</a>
+                <a class="text-white" style= "cursor: pointer;" onClick="document.getElementById('qualification').scrollIntoView()">Ed&Xp</a>
                 <span class="px-3">|</span>
-                <a class="text-white" onClick="document.getElementById('skill').scrollIntoView()">Skills</a>
+                <a class="text-white" style= "cursor: pointer;" onClick="document.getElementById('skill').scrollIntoView()">Skills</a>
 				<span class="px-3">|</span>
-                <a class="text-white" onClick="document.getElementById('service').scrollIntoView()">Services</a>
+                <a class="text-white" style= "cursor: pointer;" onClick="document.getElementById('service').scrollIntoView()">Services</a>
 				<span class="px-3">|</span>
-                <a class="text-white"onClick="document.getElementById('contact').scrollIntoView()">Contact</a>
+                <a class="text-white" style= "cursor: pointer;" onClick="document.getElementById('contact').scrollIntoView()">Contact</a>
             </div>
             <p class="m-0">&copy; <a class="text-white font-weight-bold" href="#">Tiberiu Cobzaru</a>.  I have no rights. *Website was built on top of free templates.
             </p>
@@ -458,12 +424,16 @@
     </div>
     <!-- Footer End -->
 
+
+	<!-- cursor -->
+
+
     <!-- Scroll to Bottom -->
     <i class="fa fa-2x fa-angle-down text-white scroll-to-bottom"></i>
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-outline-dark px-0 back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
+    <a href="#" class="btn btn-outline-dark px-0 back-to-top"><i class="fa fa-angle-double-up"></i></a>	
+	
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -472,15 +442,15 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/isotope/isotope.pkgd.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
 
     <!-- Contact Javascript File -->
     <script src="mail/jqBootstrapValidation.min.js"></script>
     <script src="mail/contact.js"></script>
 	
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js"></script>	
+	
 </body>
 
 </html>
