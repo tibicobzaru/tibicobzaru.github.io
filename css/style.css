@@ -255,8 +255,9 @@
     font-size: clamp(8rem, 38vw, 14rem);
     right: -0.5rem;
   }
+}
 
-	a {
+a {
   color: var(--orange);
   text-decoration: none;
 }
@@ -334,7 +335,4 @@ a:visited {
     display: block;
     margin-bottom: 0.25rem;
   }
-
-  
-}
 
