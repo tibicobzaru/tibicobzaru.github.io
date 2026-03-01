@@ -261,6 +261,12 @@
   text-decoration: none;
 }
 
+a.proof-link,
+a.proof-link:visited,
+a.proof-link:link{
+  color:var(--orange) !important;
+}	
+
 a:visited {
   color: inherit;
 }
