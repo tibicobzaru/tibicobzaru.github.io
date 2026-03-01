@@ -257,10 +257,7 @@
   }
 }
 
-a {
-  color: var(--orange);
-  text-decoration: none;
-}
+
 
 a.proof-link,
 a.proof-link:visited,
