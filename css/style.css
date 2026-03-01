@@ -42,17 +42,13 @@
     .mobile-menu a:hover{color:var(--orange);}
 
     /* HERO */
-    #top{
-      min-height:100vh;
-      display:grid;
-      grid-template-columns:1fr auto;
-      grid-template-rows:1fr;
-      align-items:center;
-      padding:6rem 5rem 5rem;
-      position:relative;
-      overflow:hidden;
-      gap:2rem;
-    }
+	#top{
+	  grid-template-columns:1fr;
+	  grid-template-rows:1fr;
+	  padding:6rem 1.5rem 5rem;
+	  align-items:center;
+	  justify-content:center;
+	}
     .hero-content{
       display:flex;flex-direction:column;justify-content:center;
       position:relative;z-index:2;
