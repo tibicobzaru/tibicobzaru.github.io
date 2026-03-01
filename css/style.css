@@ -45,17 +45,19 @@
 	#top{
 	  grid-template-columns:1fr;
 	  grid-template-rows:1fr;
-	  padding:6rem 1.5rem 5rem;
+	  padding: 0 1.5rem;
 	  align-items:center;
 	  justify-content:center;
 	}
 	.hero-content {
-	  position: relative;
+	  position: absolute;
 	  z-index: 3;
 	  margin: auto 0;
+	  padding-top: 4rem;
 	}
 	
 	.hero-canvas-wrap {
+	  position: absolute;
 	  top: 0;
 	  height: 50%;
 	  width: 100%;
