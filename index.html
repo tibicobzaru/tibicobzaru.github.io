@@ -602,7 +602,9 @@ function spawnBf(x,y){
   bfs.push({x,y,ws,ps,born:performance.now()});
   clickSrcs.push({x:x/innerWidth,y:y/innerHeight,f:.012,ph:Math.random()*Math.PI*2,life:1,dx:0,dy:0});
 }
-document.addEventListener('click',e=>spawnBf(e.clientX,e.clientY));
+document.addEventListener('click',e=>{
+	if(bfs.length >= 3) bfs.shift();
+	spawnBf(e.clientX,e.clientY)});
 
 // MAIN LOOP
 let lastBg=0;
