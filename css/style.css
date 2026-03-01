@@ -8,7 +8,7 @@
     html{scroll-behavior:smooth;}
     body{background:var(--ink);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;line-height:1;}
 
-    .cur{position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s;}
+    .cur{position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
     .cur-r{position:fixed;width:32px;height:32px;border:1px solid rgba(232,98,26,.38);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,border-color .28s;}
     .cur.big{width:18px;height:18px;}
     .cur-r.big{width:54px;height:54px;border-color:var(--orange);}
