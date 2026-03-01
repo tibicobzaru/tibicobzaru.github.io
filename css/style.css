@@ -256,10 +256,12 @@
     right: -0.5rem;
   }
 
-  .proof-links {
+/* PROOF LINKS */
+.proof-links {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 28px;
   padding-top: 20px;
   border-top: 1px solid rgba(0,0,0,0.08);
@@ -269,21 +271,30 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  padding: 8px 14px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: inherit;
-  opacity: 0.55;
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: border-color 0.2s, opacity 0.2s;
+  opacity: 0.6;
 }
 
 .proof-link:hover {
   opacity: 1;
+  border-color: rgba(0,0,0,0.35);
 }
 
 .proof-icon {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.proof-link:hover .proof-icon {
+  transform: translate(2px, -2px);
 }
 	
   .hero-canvas-wrap {
