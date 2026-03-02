@@ -1,0 +1,247 @@
+/* ============================================================
+   LIGHT THEME — tibicobzaru.github.io
+   Add this CSS file to your project and drop the toggle HTML
+   snippet into your nav (see theme-toggle-snippet.html)
+   ============================================================ */
+
+/* ---------- LIGHT THEME VARIABLES ---------- */
+[data-theme="light"] {
+  --ink: #f5f0eb;
+  --ink2: #ede8e2;
+  --orange: #c94f0e;
+  --o20: rgba(201, 79, 14, 0.20);
+  --o10: rgba(201, 79, 14, 0.10);
+  --o05: rgba(201, 79, 14, 0.05);
+  --text: #1a1208;
+  --muted: #7a6a58;
+  --dim: #5a4e42;
+  --border: rgba(26, 18, 8, 0.10);
+  --glass: rgba(0, 0, 0, 0.03);
+}
+
+/* ---------- LIGHT BODY & BACKGROUND ---------- */
+[data-theme="light"] body {
+  background: var(--ink);
+  color: var(--text);
+}
+
+/* ---------- LIGHT NAV ---------- */
+[data-theme="light"] nav {
+  background: rgba(245, 240, 235, 0.92);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .mobile-menu {
+  background: rgba(245, 240, 235, 0.98);
+}
+
+[data-theme="light"] .mobile-menu a {
+  color: var(--text);
+}
+
+/* ---------- LIGHT ORBS (softer, warm) ---------- */
+[data-theme="light"] .o1 {
+  background: radial-gradient(circle, rgba(201, 79, 14, 0.09) 0%, transparent 65%);
+}
+[data-theme="light"] .o2 {
+  background: radial-gradient(circle, rgba(180, 140, 100, 0.12) 0%, transparent 65%);
+}
+[data-theme="light"] .o3 {
+  background: radial-gradient(circle, rgba(201, 79, 14, 0.04) 0%, transparent 65%);
+}
+
+/* ---------- LIGHT NOISE (slightly more visible on light) ---------- */
+[data-theme="light"] .noise {
+  opacity: 0.018;
+}
+
+/* ---------- LIGHT HERO ---------- */
+[data-theme="light"] .hero-bg-num {
+  -webkit-text-stroke: 1px rgba(201, 79, 14, 0.06);
+}
+
+/* ---------- LIGHT STORIES ---------- */
+[data-theme="light"] .stories {
+  background: var(--border);
+}
+[data-theme="light"] .story {
+  background: var(--ink2);
+}
+[data-theme="light"] .story:hover {
+  background: #e8e2db;
+}
+
+[data-theme="light"] .metric {
+  background: rgba(201, 79, 14, 0.04);
+  border-color: rgba(201, 79, 14, 0.14);
+}
+
+[data-theme="light"] .story-outcome {
+  background: rgba(0,0,0,0.025);
+  border-color: var(--border);
+  border-left-color: var(--orange);
+}
+
+/* ---------- LIGHT THINKING CARDS ---------- */
+[data-theme="light"] .thinking-grid {
+  background: var(--border);
+}
+[data-theme="light"] .t-card {
+  background: var(--ink2);
+}
+[data-theme="light"] .t-card::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, transparent 50%);
+}
+[data-theme="light"] .t-card:hover {
+  background: #e8e2db;
+}
+[data-theme="light"] .t-card.wide {
+  background: rgba(201, 79, 14, 0.03);
+  border-top-color: rgba(201, 79, 14, 0.09);
+}
+
+/* ---------- LIGHT CASE STUDY ---------- */
+[data-theme="light"] .cs-grid {
+  background: var(--border);
+}
+[data-theme="light"] .cs-block {
+  background: var(--ink2);
+}
+[data-theme="light"] .cs-block::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, transparent 50%);
+}
+[data-theme="light"] .cs-block:hover {
+  background: #e8e2db;
+}
+[data-theme="light"] .cs-block.accent {
+  background: rgba(201, 79, 14, 0.03);
+  border-top-color: rgba(201, 79, 14, 0.09);
+}
+[data-theme="light"] .cs-disclaimer {
+  background: rgba(0,0,0,0.03);
+  border-color: var(--border);
+}
+[data-theme="light"] .cs-comp {
+  background: rgba(201, 79, 14, 0.04);
+  border-color: rgba(201, 79, 14, 0.12);
+}
+[data-theme="light"] .cs-us {
+  background: rgba(0,0,0,0.025);
+  border-color: var(--border);
+}
+[data-theme="light"] .cs-arch {
+  background: rgba(201, 79, 14, 0.03);
+  border-color: rgba(201, 79, 14, 0.12);
+}
+[data-theme="light"] .cs-arch-row {
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .cs-arch-tag {
+  background: rgba(201, 79, 14, 0.08);
+  border-color: rgba(201, 79, 14, 0.18);
+}
+[data-theme="light"] .cs-bonus {
+  background: rgba(201, 79, 14, 0.04);
+  border-color: rgba(201, 79, 14, 0.14);
+}
+[data-theme="light"] .cs-step-num {
+  border-color: rgba(201, 79, 14, 0.3);
+}
+[data-theme="light"] .cs-step-line {
+  background: rgba(201, 79, 14, 0.12);
+}
+
+/* ---------- LIGHT BACKGROUND SECTION ---------- */
+[data-theme="light"] .bg-row {
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .sk {
+  background: rgba(0,0,0,0.025);
+  border-color: var(--border);
+}
+[data-theme="light"] .sk:hover {
+  border-color: rgba(201, 79, 14, 0.3);
+}
+[data-theme="light"] .cert-chip {
+  background: rgba(0,0,0,0.025);
+  border-color: var(--border);
+}
+[data-theme="light"] .cert-chip:hover {
+  border-color: rgba(201, 79, 14, 0.3);
+}
+
+/* ---------- LIGHT SCROLL-TOP BUTTON ---------- */
+[data-theme="light"] .stb {
+  background: rgba(0,0,0,0.04);
+  border-color: var(--border);
+}
+
+/* ---------- LIGHT FOOTER ---------- */
+[data-theme="light"] footer {
+  border-top-color: var(--border);
+}
+
+/* ---------- LIGHT PROOF LINKS ---------- */
+[data-theme="light"] .proof-link {
+  border-color: rgba(0,0,0,0.14);
+}
+
+/* ---------- LIGHT CURSOR RING ---------- */
+[data-theme="light"] .cur-r {
+  border-color: rgba(201, 79, 14, 0.35);
+}
+
+/* ---------- THEME TOGGLE BUTTON ---------- */
+.theme-toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: none !important;
+  transition: background 0.3s, border-color 0.3s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.theme-toggle:hover {
+  border-color: rgba(232,98,26,0.35);
+}
+
+.theme-toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--orange);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+[data-theme="light"] .theme-toggle {
+  background: rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .theme-toggle-knob {
+  transform: translateX(18px);
+}
+
+/* Icon inside knob */
+.theme-toggle-knob::before {
+  content: '☽';
+  color: #fff;
+  font-size: 8px;
+}
+
+[data-theme="light"] .theme-toggle-knob::before {
+  content: '☀';
+  color: #fff;
+  font-size: 8px;
+}
