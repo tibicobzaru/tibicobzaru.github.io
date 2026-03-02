@@ -232,6 +232,83 @@
     .cs-bonus-item:last-child{margin-bottom:0;}
     .cs-bonus-item::before{content:'✦';color:var(--orange);opacity:.5;font-size:.65rem;flex-shrink:0;margin-top:.25rem;}
 
+    /* ── NARRATION STRIP ── */
+	.narration-strip {
+	  position: fixed;
+	  top: 58px; /* matches your nav height */
+	  left: 0;
+	  right: 0;
+	  z-index: 99;
+	  display: flex;
+	  align-items: center;
+	  gap: 1.2rem;
+	  padding: .55rem 4rem;
+	  background: rgba(10,15,26,.75);
+	  backdrop-filter: blur(20px);
+	  -webkit-backdrop-filter: blur(20px);
+	  border-bottom: 1px solid var(--border);
+	  transition: background .4s ease;
+	}
+	
+	[data-theme="light"] .narration-strip {
+	  background: rgba(245,240,235,.82);
+	}
+	
+	.narration-btn {
+	  display: inline-flex;
+	  align-items: center;
+	  gap: .55rem;
+	  background: none;
+	  border: none;
+	  padding: 0;
+	  color: var(--orange);
+	  font-family: 'DM Mono', monospace;
+	  font-size: .65rem;
+	  letter-spacing: .12em;
+	  text-transform: uppercase;
+	  cursor: none !important;
+	  transition: opacity .2s;
+	  flex-shrink: 0;
+	  white-space: nowrap;
+	}
+	.narration-btn:hover { opacity: .7; }
+	
+	.narration-meta {
+	  font-family: 'DM Mono', monospace;
+	  font-size: .6rem;
+	  color: var(--muted);
+	  letter-spacing: .08em;
+	  flex-shrink: 0;
+	}
+	
+	/* Progress bar stretches to fill remaining space */
+	.narration-progress-wrap {
+	  flex: 1;
+	  height: 1px;
+	  background: var(--border);
+	  border-radius: 999px;
+	  overflow: hidden;
+	}
+	
+	.narration-progress-fill {
+	  height: 100%;
+	  width: 0%;
+	  background: var(--orange);
+	  border-radius: 999px;
+	  transition: width .3s ease;
+	  opacity: .6;
+	}
+	
+	@media(max-width:768px) {
+	  .narration-strip {
+	    padding: .55rem 1.5rem;
+	    gap: .9rem;
+	  }
+	}
+	
+	
+
+
 	html{
     overflow-x: hidden;
     }
