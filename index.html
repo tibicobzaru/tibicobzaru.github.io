@@ -9,6 +9,7 @@
   <meta property="og:type" content="website" />
   <title>Tibi Cobzaru | PM Europe</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="theme-toggle.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-TWEEC07TPS"></script>
@@ -58,7 +59,10 @@
       </ul>
       <button class="nav-burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
-      </button>
+      </button>	
+	<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+	  <span class="theme-toggle-knob"></span>
+	</button>
     </nav>
 
     <section id="top">
@@ -440,6 +444,28 @@
   </div>
 
 <script>
+  (function () {
+    const STORAGE_KEY = 'tc-theme';
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    // Apply saved preference immediately (avoids flash)
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'light') html.setAttribute('data-theme', 'light');
+
+    toggle.addEventListener('click', () => {
+      const isLight = html.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem(STORAGE_KEY, 'dark');
+      } else {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem(STORAGE_KEY, 'light');
+      }
+    });
+  })();
+
+	
 // CURSOR
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
