@@ -1,7 +1,5 @@
 /* ============================================================
    LIGHT THEME — tibicobzaru.github.io
-   Add this CSS file to your project and drop the toggle HTML
-   snippet into your nav (see theme-toggle-snippet.html)
    ============================================================ */
 
 /* ---------- LIGHT THEME VARIABLES ---------- */
@@ -191,57 +189,133 @@
   border-color: rgba(201, 79, 14, 0.35);
 }
 
-/* ---------- THEME TOGGLE BUTTON ---------- */
-.theme-toggle {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  cursor: none !important;
-  transition: background 0.3s, border-color 0.3s;
-  flex-shrink: 0;
-  display: flex;
+/* ============================================================
+   THEME TOGGLE — Hero placement, modern sun/moon switch
+   ============================================================ */
+
+/* Wrapper sits in hero, bottom-left of hero-content or absolute */
+.theme-toggle-wrap {
+  display: inline-flex;
   align-items: center;
-  padding: 2px;
+  gap: 10px;
+  margin-top: 2.4rem;
+  opacity: 0;
+  animation: up 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.8s;
 }
 
-.theme-toggle:hover {
-  border-color: rgba(232,98,26,0.35);
-}
-
-.theme-toggle-knob {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--orange);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  line-height: 1;
+.theme-toggle-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  user-select: none;
   pointer-events: none;
 }
 
+/* The pill track */
+.theme-toggle {
+  position: relative;
+  width: 72px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(232,98,26,0.22);
+  cursor: none !important;
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 12px rgba(0,0,0,0.3);
+  outline: none;
+}
+
+.theme-toggle:hover {
+  border-color: rgba(232,98,26,0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 3px rgba(232,98,26,0.1), 0 2px 12px rgba(0,0,0,0.3);
+}
+
 [data-theme="light"] .theme-toggle {
-  background: rgba(0,0,0,0.06);
+  background: rgba(201,79,14,0.08);
+  border-color: rgba(201,79,14,0.3);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.1);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  border-color: rgba(201,79,14,0.6);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 0 0 3px rgba(201,79,14,0.12), 0 2px 12px rgba(0,0,0,0.1);
+}
+
+/* Sliding knob */
+.theme-toggle-knob {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8621a 0%, #c94500 100%);
+  box-shadow: 0 2px 8px rgba(232,98,26,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.4s, box-shadow 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 [data-theme="light"] .theme-toggle-knob {
-  transform: translateX(18px);
+  transform: translateX(36px);
+  background: linear-gradient(135deg, #e8aa00 0%, #c98000 100%);
+  box-shadow: 0 2px 8px rgba(232,160,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
-/* Icon inside knob */
-.theme-toggle-knob::before {
-  content: '☽';
-  color: #fff;
-  font-size: 8px;
+/* SVG icons inside knob */
+.theme-toggle-knob svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  position: absolute;
+  transition: opacity 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 
-[data-theme="light"] .theme-toggle-knob::before {
-  content: '☀';
-  color: #fff;
-  font-size: 8px;
+/* Moon shown in dark mode */
+.icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+/* Sun shown in light mode */
+[data-theme="light"] .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+}
+[data-theme="light"] .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Background stars (dark) / rays (light) decoration inside track */
+.theme-toggle::before {
+  content: '· · ·';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(232,98,26,0.3);
+  pointer-events: none;
+  transition: opacity 0.3s;
+  line-height: 1;
+}
+
+[data-theme="light"] .theme-toggle::before {
+  opacity: 0;
 }
