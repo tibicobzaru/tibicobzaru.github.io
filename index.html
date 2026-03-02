@@ -53,7 +53,7 @@
 		<div class="toggle-wrap">
   <span class="toggle-side-label left">Dark</span>
 
-  <button class="theme-switch" id="themeToggle" aria-label="Toggle theme">
+  <button class="theme-switch" class="theme-toggle-trigger" aria-label="Toggle theme">
     <div class="track-glow"></div>
     <span class="star"></span>
     <span class="star"></span>
@@ -104,7 +104,7 @@
 		  <div class="toggle-wrap">
   <span class="toggle-side-label left">Dark</span>
 
-  <button class="theme-switch" id="themeToggle" aria-label="Toggle theme">
+  <button class="theme-switch" class="theme-toggle-trigger" aria-label="Toggle theme">
     <div class="track-glow"></div>
     <span class="star"></span>
     <span class="star"></span>
@@ -517,15 +517,23 @@
 <script>
   (function () {
     const STORAGE_KEY = 'tc-theme';
-    const toggle = document.getElementById('themeToggle');
-    const html = document.documentElement;
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'light') html.setAttribute('data-theme', 'light');
-    toggle.addEventListener('click', () => {
-      const isDark = html.getAttribute('data-theme') !== 'light';
-      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      localStorage.setItem(STORAGE_KEY, isDark ? 'light' : 'dark');
-    });
+const toggles = document.querySelectorAll('.theme-toggle-trigger');
+const html = document.documentElement;
+
+function setTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+  const current = html.getAttribute('data-theme');
+  const newTheme = current === 'light' ? 'dark' : 'light';
+  setTheme(newTheme);
+}
+
+toggles.forEach(toggle => {
+  toggle.addEventListener('click', toggleTheme);
+});
   })();
 </script>
 <script>
