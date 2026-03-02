@@ -50,42 +50,8 @@
   <div class="page">
     <nav id="nav">
       <a href="#top" class="nlogo"><span class="p1">Tibi</span><span class="p2">Cobzaru</span></a>
-		<div class="toggle-wrap">
-  <span class="toggle-side-label left">Dark</span>
 
-  <button class="theme-switch" class="theme-toggle-trigger" aria-label="Toggle theme">
-    <div class="track-glow"></div>
-    <span class="star"></span>
-    <span class="star"></span>
-    <span class="star"></span>
-    <div class="switch-knob">
-      <div class="icon-wrap">
-        <!-- Moon (dark mode) -->
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
-             stroke="#e8621a" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-        <!-- Sun (light mode) -->
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
-             stroke="#c94f0e" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <line x1="12" y1="2" x2="12" y2="5"/>
-          <line x1="12" y1="19" x2="12" y2="22"/>
-          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-          <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-          <line x1="2" y1="12" x2="5" y2="12"/>
-          <line x1="19" y1="12" x2="22" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-          <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-        </svg>
-      </div>
-    </div>
-  </button>
-
-  <span class="toggle-side-label right">Light</span>
-</div>
+		
 		
       <ul class="nlinks">
         <li><a href="#work">Work</a></li>
@@ -101,42 +67,56 @@
 
     <section id="top">
       <div class="hero-content">
-		  <div class="toggle-wrap">
+
+
+
+
+<div class="toggle-wrap">
   <span class="toggle-side-label left">Dark</span>
 
-  <button class="theme-switch" class="theme-toggle-trigger" aria-label="Toggle theme">
+  <button class="theme-switch" id="toggle" aria-label="Toggle theme">
     <div class="track-glow"></div>
+
+    <!-- Stars (visible dark mode) -->
     <span class="star"></span>
     <span class="star"></span>
     <span class="star"></span>
+
     <div class="switch-knob">
       <div class="icon-wrap">
-        <!-- Moon (dark mode) -->
+
+        <!-- MOON SVG -->
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
              stroke="#e8621a" stroke-width="1.8"
              stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          <path d="M21 12.79A9 9 0 1 1 11.21 3
+                   7 7 0 0 0 21 12.79z"/>
         </svg>
-        <!-- Sun (light mode) -->
+
+        <!-- SUN SVG -->
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
              stroke="#c94f0e" stroke-width="1.8"
              stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"/>
-          <line x1="12" y1="2" x2="12" y2="5"/>
-          <line x1="12" y1="19" x2="12" y2="22"/>
+          <line x1="12" y1="2"     x2="12" y2="5"/>
+          <line x1="12" y1="19"    x2="12" y2="22"/>
           <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
           <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-          <line x1="2" y1="12" x2="5" y2="12"/>
-          <line x1="19" y1="12" x2="22" y2="12"/>
+          <line x1="2"  y1="12"    x2="5"  y2="12"/>
+          <line x1="19" y1="12"    x2="22" y2="12"/>
           <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
           <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
         </svg>
+
       </div>
     </div>
   </button>
 
   <span class="toggle-side-label right">Light</span>
 </div>
+		  <br>
+
+		  
         <p class="hero-eyebrow">Product Manager · Europe</p>
         <h1 class="hero-name">
           <span class="hl" id="l0">T</span><span class="hl" id="l1">I</span><span class="hl" id="l2">B</span><span class="hl" id="l3">I</span>
@@ -515,28 +495,6 @@
 
 
 <script>
-  (function () {
-    const STORAGE_KEY = 'tc-theme';
-const toggles = document.querySelectorAll('.theme-toggle-trigger');
-const html = document.documentElement;
-
-function setTheme(theme) {
-  html.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
-}
-
-function toggleTheme() {
-  const current = html.getAttribute('data-theme');
-  const newTheme = current === 'light' ? 'dark' : 'light';
-  setTheme(newTheme);
-}
-
-toggles.forEach(toggle => {
-  toggle.addEventListener('click', toggleTheme);
-});
-  })();
-</script>
-<script>
 	
 // CURSOR
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
@@ -747,5 +705,16 @@ const obs=new IntersectionObserver(entries=>{
 },{threshold:.07});
 document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
 </script>
+
+
+	<script>
+const btn = document.getElementById('toggle');
+  const html = document.documentElement;
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+</script>	
 </body>
 </html>
