@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -71,49 +71,32 @@
 
 
 
-<div class="toggle-wrap">
-  <span class="toggle-side-label left">Dark</span>
 
-  <button class="theme-switch" id="toggle" aria-label="Toggle theme">
-    <div class="track-glow"></div>
 
-    <!-- Stars (visible dark mode) -->
-    <span class="star"></span>
-    <span class="star"></span>
-    <span class="star"></span>
-
-    <div class="switch-knob">
-      <div class="icon-wrap">
-
-        <!-- MOON SVG -->
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
-             stroke="#e8621a" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3
-                   7 7 0 0 0 21 12.79z"/>
-        </svg>
-
-        <!-- SUN SVG -->
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
-             stroke="#c94f0e" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <line x1="12" y1="2"     x2="12" y2="5"/>
-          <line x1="12" y1="19"    x2="12" y2="22"/>
-          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-          <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-          <line x1="2"  y1="12"    x2="5"  y2="12"/>
-          <line x1="19" y1="12"    x2="22" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-          <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-        </svg>
-
-      </div>
-    </div>
+<div class="tc-toggle">
+  <span class="tc-lbl">Dark</span>
+  <button class="tc-btn" data-toggle aria-label="Toggle theme">
+    <span class="tc-knob">
+      <svg class="tc-moon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="rgba(255,255,255,0.18)"/>
+      </svg>
+      <svg class="tc-sun" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4" fill="rgba(255,255,255,0.2)"/>
+        <line x1="12" y1="2" x2="12" y2="5"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="5" y2="12"/>
+        <line x1="19" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+      </svg>
+    </span>
   </button>
-
-  <span class="toggle-side-label right">Light</span>
+  <span class="tc-lbl">Light</span>
 </div>
+
+
 		  <br>
 
 		  
@@ -704,17 +687,28 @@ const obs=new IntersectionObserver(entries=>{
   entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*50);obs.unobserve(e.target);}});
 },{threshold:.07});
 document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+
+
+
+(function() {
+  const KEY = 'tc-theme';
+  const html = document.documentElement;
+
+  // Restore saved preference without flash
+  const saved = localStorage.getItem(KEY);
+  if (saved) html.setAttribute('data-theme', saved);
+
+  // Any element with data-toggle toggles the theme
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('[data-toggle]')) return;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem(KEY, next);
+  });
+})();
+	
 </script>
 
 
-	<script>
-const btn = document.getElementById('toggle');
-  const html = document.documentElement;
-
-  btn.addEventListener('click', () => {
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  });
-</script>	
 </body>
 </html>
