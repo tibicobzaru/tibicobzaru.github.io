@@ -59,13 +59,46 @@
       </ul>
       <button class="nav-burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
-      </button>	
-	<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
-	  <span class="theme-toggle-knob"></span>
-	</button>
     </nav>
 
     <section id="top">
+		
+<div class="toggle-wrap">
+  <span class="toggle-side-label left">Dark</span>
+
+  <button class="theme-switch" id="themeToggle" aria-label="Toggle theme">
+    <div class="track-glow"></div>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <div class="switch-knob">
+      <div class="icon-wrap">
+        <!-- Moon (dark mode) -->
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
+             stroke="#e8621a" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Sun (light mode) -->
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
+             stroke="#c94f0e" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <line x1="12" y1="2" x2="12" y2="5"/>
+          <line x1="12" y1="19" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+          <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="5" y2="12"/>
+          <line x1="19" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+          <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+        </svg>
+      </div>
+    </div>
+  </button>
+
+  <span class="toggle-side-label right">Light</span>
+</div>
       <div class="hero-content">
         <p class="hero-eyebrow">Product Manager · Europe</p>
         <h1 class="hero-name">
@@ -443,28 +476,22 @@
     <footer><p>&copy; Tiberiu Cobzaru &mdash; <span class="o">I have no rights.</span></p></footer>
   </div>
 
+
 <script>
   (function () {
     const STORAGE_KEY = 'tc-theme';
     const toggle = document.getElementById('themeToggle');
     const html = document.documentElement;
-
-    // Apply saved preference immediately (avoids flash)
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'light') html.setAttribute('data-theme', 'light');
-
     toggle.addEventListener('click', () => {
-      const isLight = html.getAttribute('data-theme') === 'light';
-      if (isLight) {
-        html.removeAttribute('data-theme');
-        localStorage.setItem(STORAGE_KEY, 'dark');
-      } else {
-        html.setAttribute('data-theme', 'light');
-        localStorage.setItem(STORAGE_KEY, 'light');
-      }
+      const isDark = html.getAttribute('data-theme') !== 'light';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem(STORAGE_KEY, isDark ? 'light' : 'dark');
     });
   })();
-
+</script>
+<script>
 	
 // CURSOR
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
