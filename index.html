@@ -686,15 +686,15 @@ function drawHG(){
 // BUTTERFLY
 const bfs=[];
 function spawnBf(x,y){
-  const ws=[];for(let w=0;w<6;w++) ws.push({delay:w*150+Math.random()*40,r:0,maxR:28+w*58+Math.random()*18,spd:1.0+w*.28,op:.78-w*.09,lw:1.2-w*.1,dead:false,born:false});
-  const ps=[];for(let i=0;i<12;i++){const a=Math.random()*Math.PI*2,s=.3+Math.random()*1.5;ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,sz:Math.random()*1.8+.35,op:.75+Math.random()*.2,life:1,dc:.003+Math.random()*.003,delay:Math.random()*280+55,born:false,dead:false});}
+  const ws=[];for(let w=0;w<4;w++) ws.push({delay:w*100+Math.random()*30,r:0,maxR:22+w*50+Math.random()*14,spd:2.2+w*.35,op:.7-w*.1,lw:1.1-w*.08,dead:false,born:false});
+  const ps=[];for(let i=0;i<8;i++){const a=Math.random()*Math.PI*2,s=.4+Math.random()*1.4;ps.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,sz:Math.random()*1.5+.3,op:.7+Math.random()*.2,life:1,dc:.006+Math.random()*.004,delay:Math.random()*180+40,born:false,dead:false});}
   bfs.push({x,y,ws,ps,born:performance.now()});
   clickSrcs.push({x:x/innerWidth,y:y/innerHeight,f:.012,ph:Math.random()*Math.PI*2,life:1,dx:0,dy:0});
 }
 document.addEventListener('click',e=>{
-	if(bfs.length >= 3) bfs.shift();
-	spawnBf(e.clientX,e.clientY)});
-
+  if(bfs.length>=2) bfs.shift();
+  spawnBf(e.clientX,e.clientY);
+});
 // MAIN LOOP
 let lastBg=0;
 function frame(now){
