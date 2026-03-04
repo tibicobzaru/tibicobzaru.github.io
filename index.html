@@ -643,14 +643,14 @@ function drawHG(){
   const w=heroCv.width,h=heroCv.height;
   const cx=w*.5,cy=h*.5;
   const hw=Math.min(w*.38,200),hh=Math.min(h*.43,320);
-  heroCtx.strokeStyle='rgba(232,98,26,.18)';heroCtx.lineWidth=1;
+  heroCtx.strokeStyle='rgba(232,98,26,.45)';heroCtx.lineWidth=1;
   heroCtx.beginPath();heroCtx.moveTo(cx-hw,cy-hh);heroCtx.lineTo(cx+hw,cy-hh);heroCtx.lineTo(cx+4,cy);heroCtx.lineTo(cx+hw,cy+hh);heroCtx.lineTo(cx-hw,cy+hh);heroCtx.lineTo(cx-4,cy);heroCtx.closePath();heroCtx.stroke();
-  heroCtx.strokeStyle='rgba(232,98,26,.12)';heroCtx.lineWidth=8;
+  heroCtx.strokeStyle='rgba(232,98,26,.28)';heroCtx.lineWidth=8;
   heroCtx.beginPath();heroCtx.moveTo(cx-hw,cy-hh);heroCtx.lineTo(cx+hw,cy-hh);heroCtx.stroke();
   heroCtx.beginPath();heroCtx.moveTo(cx-hw,cy+hh);heroCtx.lineTo(cx+hw,cy+hh);heroCtx.stroke();
   if(hw!==lastHW||hh!==lastHH){
     heroGrad=heroCtx.createLinearGradient(cx-hw,cy,cx+hw,cy);
-    heroGrad.addColorStop(0,'transparent');heroGrad.addColorStop(.5,'rgba(232,98,26,.26)');heroGrad.addColorStop(1,'transparent');
+    heroGrad.addColorStop(0,'transparent');heroGrad.addColorStop(.5,'rgba(232,98,26,.70)');heroGrad.addColorStop(1,'transparent');
     lastHW=hw;lastHH=hh;
   }
   heroCtx.strokeStyle=heroGrad;heroCtx.lineWidth=2;
