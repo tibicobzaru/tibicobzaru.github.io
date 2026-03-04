@@ -292,3 +292,8 @@
   opacity: 0;
   animation: up 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.8s;
 }
+
+[data-theme="light"] #cv-hero {
+  opacity: 1;
+  mix-blend-mode: multiply;
+}
