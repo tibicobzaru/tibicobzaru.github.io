@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src wss://localdrop-bx2n.onrender.com; img-src 'self' data: blob:; media-src blob:; object-src 'none'; base-uri 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src wss://localdrop-bx2n.onrender.com; img-src 'self' data: blob:; media-src blob:; object-src 'none'; base-uri 'none';">
   <title>LocalDrop — P2P Transfer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,9 +224,57 @@
     /* ── Misc ────────────────────────────────────────────────────────── */
     .tc  { text-align: center; }
     .mt  { color: var(--muted); font-size: 12px; text-align: center; }
+
+    /* ── Light theme overrides ───────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg:     #f1f5fb;
+      --surf:   #ffffff;
+      --surf2:  #e4ecf7;
+      --border: #c2d0e6;
+      --cyan:   #0891b2;
+      --indigo: #4f46e5;
+      --green:  #16a34a;
+      --red:    #dc2626;
+      --text:   #0f172a;
+      --muted:  #475569;
+    }
+    [data-theme="light"] body::before {
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(8,145,178,.08) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 85% 95%, rgba(79,70,229,.08) 0%, transparent 55%);
+    }
+    [data-theme="light"] .btn-p { color: #fff; }
+
+    /* ── Theme toggle (positioned top-right) ─────────────────────────── */
+    .theme-toggle-wrap {
+      position: fixed; top: 12px; right: 16px; z-index: 999;
+    }
   </style>
+  <link rel="stylesheet" href="../css/theme-toggle.css">
 </head>
 <body>
+
+<div class="theme-toggle-wrap">
+  <div class="tc-toggle">
+    <span class="tc-lbl">Dark</span>
+    <button class="tc-btn" data-toggle aria-label="Toggle theme">
+      <span class="tc-knob">
+        <svg class="tc-moon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="rgba(255,255,255,0.18)"/>
+        </svg>
+        <svg class="tc-sun" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4" fill="rgba(255,255,255,0.2)"/>
+          <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+        </svg>
+      </span>
+    </button>
+    <span class="tc-lbl">Light</span>
+  </div>
+</div>
+
 <div id="root">
 
   <div class="logo">
@@ -943,6 +991,20 @@ function teardown(navigate = true) {
   sendQ = []; sending = false;
   recvCtx = null; iceQueue = [];
 }
+
+// ─── Theme toggle ─────────────────────────────────────────────────────────────
+(function () {
+  const KEY = 'tc-theme';
+  const html = document.documentElement;
+  const saved = localStorage.getItem(KEY);
+  if (saved) html.setAttribute('data-theme', saved);
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-toggle]')) return;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem(KEY, next);
+  });
+})();
 
 // ─── Auto-join from URL param ──────────────────────────────────────────────────
 window.addEventListener('load', () => {
