@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src wss://localdrop-bx2n.onrender.com stun: turns:; img-src 'self' data: blob:; media-src blob:; object-src 'none'; base-uri 'none';">
   <title>LocalDrop — P2P Transfer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -429,7 +430,10 @@ function isURL(s) {
 
 // ─── Room code ────────────────────────────────────────────────────────────────
 function genCode() {
-  return Array.from({ length: 6 }, () => ALPHA[Math.floor(Math.random() * ALPHA.length)]).join('');
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+  // ALPHA.length = 32, and 256 / 32 = 8 exactly — no modulo bias
+  return Array.from(bytes, b => ALPHA[b % ALPHA.length]).join('');
 }
 
 function copyCode() {
@@ -692,11 +696,17 @@ function onPeerLeft() {
 // ─── Data channel protocol ────────────────────────────────────────────────────
 function handleMsg(msg) {
   switch (msg.type) {
-    case 'file-start':
-      recvCtx = { id: msg.id, name: msg.name, size: msg.size, mime: msg.mime, chunks: [], got: 0, ts: Date.now() };
+    case 'file-start': {
+      // Validate all peer-supplied fields before trusting them
+      if (typeof msg.id   !== 'string' || !msg.id)   break;
+      if (typeof msg.name !== 'string' || !msg.name) break;
+      if (typeof msg.size !== 'number' || msg.size < 0 || msg.size > 4 * 1024 ** 3) break;
+      const safeName = msg.name.slice(0, 255).replace(/[/\\]/g, '_');
+      const safeMime = (typeof msg.mime === 'string' ? msg.mime : 'application/octet-stream').slice(0, 100);
+      recvCtx = { id: msg.id.slice(0, 32), name: safeName, size: msg.size, mime: safeMime, chunks: [], got: 0, ts: Date.now() };
       addT({ ...recvCtx, dir: 'recv', status: 'active', prog: 0 });
       break;
-
+    }
     case 'file-end':
       if (recvCtx?.id === msg.id) {
         const blob = new Blob(recvCtx.chunks, { type: recvCtx.mime });
@@ -707,11 +717,15 @@ function handleMsg(msg) {
       }
       break;
 
-    case 'clip':
-      clips.unshift({ ...msg, dir: 'recv' });
+    case 'clip': {
+      // Cap clipboard content at 50 KB to prevent memory abuse
+      if (typeof msg.content !== 'string') break;
+      const safeContent = msg.content.slice(0, 50_000);
+      clips.unshift({ ...msg, content: safeContent, dir: 'recv' });
       renderC();
       toast('📋 Text received!');
       break;
+    }
   }
 }
 
@@ -882,12 +896,18 @@ function renderC() {
       </div>
       <div class="ci-body">${link ? `<a href="${esc(c.content)}" target="_blank" rel="noopener">${esc(c.content)}</a>` : esc(c.content)}</div>
       <div class="ci-acts">
-        <button class="btn btn-s btn-sm" onclick="copyClip(${JSON.stringify(c.content)})">Copy</button>
-        ${link ? `<a href="${esc(c.content)}" target="_blank" rel="noopener" class="btn btn-g btn-sm">Open</a>` : ''}
+        <button class="btn btn-s btn-sm" data-copy="${esc(c.content)}">Copy</button>
+        ${link ? `<a href="${esc(c.content)}" target="_blank" rel="noopener noreferrer" class="btn btn-g btn-sm">Open</a>` : ''}
       </div>
     </div>`;
   }).join('');
 }
+
+// ─── Event delegation (safe alternative to inline onclick) ────────────────────
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-copy]');
+  if (btn) copyClip(btn.dataset.copy);
+});
 
 // ─── Teardown ─────────────────────────────────────────────────────────────────
 function teardown(navigate = true) {
