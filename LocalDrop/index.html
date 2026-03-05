@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>LocalDrop — P2P Transfer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #080c18;
+      --surf:     #0f1629;
+      --surf2:    #1a2235;
+      --border:   #27374f;
+      --cyan:     #22d3ee;
+      --indigo:   #818cf8;
+      --green:    #4ade80;
+      --red:      #f87171;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --radius:   14px;
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px; line-height: 1.5; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(34,211,238,.07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 85% 95%, rgba(129,140,248,.07) 0%, transparent 55%);
+    }
+
+    #root {
+      position: relative; z-index: 1; min-height: 100%;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 16px 16px 48px; max-width: 480px; margin: 0 auto;
+    }
+
+    /* ── Logo ────────────────────────────────────────────────────────── */
+    .logo { text-align: center; padding: 28px 0 10px; }
+    .logo-bolt { font-size: 44px; display: block; margin-bottom: 10px; }
+    .logo h1 {
+      font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .logo p { color: var(--muted); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
+
+    /* ── Screens ─────────────────────────────────────────────────────── */
+    .scr { width: 100%; display: none; flex-direction: column; gap: 12px; animation: fadeUp .22s ease; }
+    .scr.on { display: flex; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    /* ── Cards ───────────────────────────────────────────────────────── */
+    .card {
+      background: var(--surf); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+    }
+    .card-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--muted); margin-bottom: 12px;
+    }
+
+    /* ── Action cards (home) ─────────────────────────────────────────── */
+    .ac {
+      background: var(--surf); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 18px;
+      cursor: pointer; display: flex; align-items: center; gap: 14px;
+      transition: border-color .15s, transform .15s, background .15s;
+      user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .ac:hover  { border-color: var(--cyan); background: rgba(34,211,238,.04); transform: translateY(-2px); }
+    .ac:active { transform: scale(.97); }
+    .ac-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .ac-icon.c { background: rgba(34,211,238,.12); }
+    .ac-icon.j { background: rgba(129,140,248,.12); }
+    .ac h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .ac p  { font-size: 12px; color: var(--muted); }
+
+    /* ── Buttons ─────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 20px; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: opacity .15s, transform .1s; width: 100%; text-decoration: none;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-p  { background: linear-gradient(135deg, var(--cyan), #0ea5e9); color: #000; }
+    .btn-p:hover  { opacity: .9; }
+    .btn-i  { background: linear-gradient(135deg, var(--indigo), #6366f1); color: #fff; }
+    .btn-i:hover  { opacity: .9; }
+    .btn-s  { background: var(--surf2); color: var(--text); border: 1px solid var(--border); }
+    .btn-s:hover  { background: #233050; }
+    .btn-g  { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-g:hover  { color: var(--text); border-color: var(--muted); }
+    .btn-sm { padding: 7px 13px; font-size: 12px; border-radius: 8px; width: auto; }
+
+    /* ── Room code display ───────────────────────────────────────────── */
+    .code-display { text-align: center; padding: 8px 0; }
+    .code-val {
+      font-size: 38px; font-weight: 800; letter-spacing: 10px;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    /* ── QR ──────────────────────────────────────────────────────────── */
+    #qr-wrap { display: flex; justify-content: center; padding: 4px 0 8px; }
+    #qr-wrap canvas, #qr-wrap img { border-radius: 10px; border: 2px solid var(--border); }
+
+    /* ── Pulse dots (waiting) ────────────────────────────────────────── */
+    .pulse-row { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 13px; padding: 8px 0; }
+    .dots { display: flex; gap: 5px; }
+    .dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: dot 1.2s ease-in-out infinite; }
+    .dots span:nth-child(2) { animation-delay: .2s; }
+    .dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dot { 0%,100%{opacity:.2;transform:scale(.7);} 50%{opacity:1;transform:scale(1);} }
+
+    /* ── Code input (join) ───────────────────────────────────────────── */
+    .code-in {
+      width: 100%; padding: 16px; background: var(--surf2); border: 2px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: 30px; font-weight: 800;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      letter-spacing: 10px; text-align: center; text-transform: uppercase; outline: none;
+      transition: border-color .15s; caret-color: var(--cyan);
+    }
+    .code-in:focus { border-color: var(--cyan); }
+    .code-in::placeholder { font-size: 18px; font-weight: 400; letter-spacing: 4px; color: var(--muted); }
+
+    /* ── Spinner ─────────────────────────────────────────────────────── */
+    .spinner-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px; color: var(--muted); font-size: 13px; text-align: center; }
+    .spin { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Status bar ──────────────────────────────────────────────────── */
+    .statusbar {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; background: var(--surf); border: 1px solid var(--border); border-radius: 10px;
+    }
+    .sdot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(74,222,128,.2); animation: sglow 2s ease-in-out infinite; }
+    @keyframes sglow { 0%,100%{ box-shadow: 0 0 0 2px rgba(74,222,128,.15); } 50%{ box-shadow: 0 0 0 6px rgba(74,222,128,.05); } }
+    .sroom { font-family: monospace; font-weight: 700; letter-spacing: 2px; color: var(--cyan); font-size: 14px; }
+    .ssep  { color: var(--border); }
+    .statusbar .btn-g { margin-left: auto; padding: 5px 11px; font-size: 11px; }
+
+    /* ── Dropzone ────────────────────────────────────────────────────── */
+    .dz {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 28px 20px; text-align: center; cursor: pointer;
+      transition: border-color .15s, background .15s; position: relative;
+    }
+    .dz:hover, .dz.over { border-color: var(--cyan); background: rgba(34,211,238,.04); }
+    .dz input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .dz-icon { font-size: 34px; margin-bottom: 8px; }
+    .dz-text { color: var(--muted); font-size: 13px; }
+    .dz-text strong { color: var(--text); }
+
+    /* ── Transfer list ───────────────────────────────────────────────── */
+    .tlist { display: flex; flex-direction: column; gap: 8px; }
+    .ti {
+      background: var(--surf2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 13px;
+    }
+    .ti-head { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .ti-icon { font-size: 18px; flex-shrink: 0; }
+    .ti-name { flex: 1; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; flex-shrink: 0; }
+    .b-send { background: rgba(34,211,238,.15); color: var(--cyan); }
+    .b-recv { background: rgba(129,140,248,.15); color: var(--indigo); }
+    .b-done { background: rgba(74,222,128,.15); color: var(--green); }
+    .b-q    { background: rgba(100,116,139,.15); color: var(--muted); }
+    .prog { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 7px; }
+    .prog-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--cyan), var(--indigo)); transition: width .1s; }
+    .ti-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+    .ti-acts { display: flex; gap: 6px; margin-top: 8px; }
+
+    /* ── Divider ─────────────────────────────────────────────────────── */
+    .divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin: 2px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── Clipboard ───────────────────────────────────────────────────── */
+    .clip-in {
+      width: 100%; padding: 11px 13px; background: var(--surf2); border: 1.5px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: 13px; outline: none;
+      resize: none; min-height: 78px; font-family: inherit; transition: border-color .15s;
+    }
+    .clip-in:focus { border-color: var(--indigo); }
+    .clip-in::placeholder { color: var(--muted); }
+
+    .clist { display: flex; flex-direction: column; gap: 8px; }
+    .ci { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; }
+    .ci-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .ci-dir  { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .dir-s { color: var(--cyan); }
+    .dir-r { color: var(--indigo); }
+    .ci-time { font-size: 11px; color: var(--muted); }
+    .ci-body { font-size: 13px; word-break: break-all; line-height: 1.5; max-height: 96px; overflow: hidden;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; }
+    .ci-body a { color: var(--cyan); text-decoration: none; }
+    .ci-acts { display: flex; gap: 6px; margin-top: 8px; }
+
+    /* ── Disconnected ────────────────────────────────────────────────── */
+    .disc-card { text-align: center; padding: 36px 20px; }
+    .disc-card .disc-icon { font-size: 48px; margin-bottom: 14px; }
+    .disc-card h2 { margin-bottom: 6px; }
+    .disc-card p  { color: var(--muted); font-size: 13px; }
+
+    /* ── Toast ───────────────────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--surf2); border: 1px solid var(--border);
+      color: var(--text); padding: 9px 18px; border-radius: 30px;
+      font-size: 13px; font-weight: 500; z-index: 9999; white-space: nowrap;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    #toast.on { transform: translateX(-50%) translateY(0); }
+
+    /* ── Misc ────────────────────────────────────────────────────────── */
+    .tc  { text-align: center; }
+    .mt  { color: var(--muted); font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+<div id="root">
+
+  <div class="logo">
+    <span class="logo-bolt">⚡</span>
+    <h1>LocalDrop</h1>
+    <p>DIRECT &middot; ENCRYPTED &middot; P2P</p>
+  </div>
+
+  <!-- Home -->
+  <div id="s-home" class="scr">
+    <div class="ac" onclick="createRoom()">
+      <div class="ac-icon c">📤</div>
+      <div>
+        <h3>Create Room</h3>
+        <p>Share your code with the other device</p>
+      </div>
+    </div>
+    <div class="ac" onclick="showJoin()">
+      <div class="ac-icon j">📥</div>
+      <div>
+        <h3>Join Room</h3>
+        <p>Enter a room code to connect</p>
+      </div>
+    </div>
+    <p class="mt">Files transfer directly between devices — nothing stored on servers</p>
+  </div>
+
+  <!-- Waiting (host, awaiting guest) -->
+  <div id="s-waiting" class="scr">
+    <div class="card">
+      <div class="card-label tc">Room Code</div>
+      <div class="code-display">
+        <div class="code-val" id="disp-code">------</div>
+        <button class="btn btn-s btn-sm" style="margin:0 auto" onclick="copyCode()">Copy Code</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label tc">Scan to join</div>
+      <div id="qr-wrap"></div>
+      <p class="mt">Or share the code manually</p>
+    </div>
+    <div class="pulse-row">
+      <div class="dots"><span></span><span></span><span></span></div>
+      Waiting for peer to join…
+    </div>
+    <button class="btn btn-g" onclick="goHome()">Cancel</button>
+  </div>
+
+  <!-- Join -->
+  <div id="s-join" class="scr">
+    <div class="card">
+      <div class="card-label">Enter Room Code</div>
+      <input id="join-in" class="code-in" type="text" maxlength="6" placeholder="XXXXXX"
+        autocomplete="off" autocapitalize="characters" spellcheck="false"
+        oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+        onkeydown="if(event.key==='Enter')joinRoom()">
+    </div>
+    <button class="btn btn-i" onclick="joinRoom()">Connect</button>
+    <button class="btn btn-g" onclick="goHome()">Back</button>
+  </div>
+
+  <!-- Connecting -->
+  <div id="s-connecting" class="scr">
+    <div class="card">
+      <div class="spinner-wrap">
+        <div class="spin"></div>
+        <span id="conn-msg">Establishing encrypted connection…</span>
+      </div>
+    </div>
+    <button class="btn btn-g" onclick="goHome()">Cancel</button>
+  </div>
+
+  <!-- Connected -->
+  <div id="s-connected" class="scr">
+
+    <div class="statusbar">
+      <div class="sdot"></div>
+      <span>Connected</span>
+      <span class="ssep">·</span>
+      <span class="sroom" id="s-room"></span>
+      <button class="btn btn-g" onclick="goHome()">Disconnect</button>
+    </div>
+
+    <div class="dz" id="dz">
+      <input type="file" id="file-in" multiple onchange="onFilePick(event)">
+      <div class="dz-icon">📁</div>
+      <div class="dz-text"><strong>Drop files here</strong><br>or tap to browse</div>
+    </div>
+
+    <div id="tlist" class="tlist" style="display:none"></div>
+
+    <div class="divider">Clipboard</div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <textarea id="clip-in" class="clip-in" placeholder="Type or paste text to send…" rows="3"></textarea>
+      <button class="btn btn-s" onclick="sendClip()">Send Text</button>
+    </div>
+
+    <div id="clist" class="clist"></div>
+
+  </div>
+
+  <!-- Disconnected -->
+  <div id="s-disconnected" class="scr">
+    <div class="card disc-card">
+      <div class="disc-icon">🔌</div>
+      <h2>Disconnected</h2>
+      <p>The peer left or the connection was lost.</p>
+    </div>
+    <button class="btn btn-p" onclick="goHome()">Back to Home</button>
+  </div>
+
+</div><!-- #root -->
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+'use strict';
+
+// ─── Config ──────────────────────────────────────────────────────────────────
+// After deploying the signaling server to Render, replace this URL:
+const SIGNAL_URL = 'wss://localdrop-signal.onrender.com';
+
+const ICE_CFG = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+  ]
+};
+
+const CHUNK     = 65536;        // 64 KB send chunk size
+const MAX_BUF   = 2097152;      // 2 MB — pause sending when buffered above this
+const ALPHA     = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // unambiguous chars
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let ws        = null;
+let pc        = null;
+let dc        = null;
+let room      = null;
+let role      = null;
+let transfers = new Map();
+let clips     = [];
+let recvCtx   = null;   // current incoming file context
+let sendQ     = [];     // queue of { id, file }
+let sending   = false;
+let iceQueue  = [];     // ICE candidates buffered before remote desc is set
+let connTimer = null;   // connection timeout
+
+// ─── DOM helpers ─────────────────────────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const qs = sel => document.querySelector(sel);
+
+function show(name) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  const el = $(`s-${name}`);
+  if (el) el.classList.add('on');
+}
+
+let toastTimer = null;
+function toast(msg, ms = 2800) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('on'), ms);
+}
+
+function fmtSize(b) {
+  if (b < 1024)           return b + ' B';
+  if (b < 1048576)        return (b / 1024).toFixed(1) + ' KB';
+  if (b < 1073741824)     return (b / 1048576).toFixed(1) + ' MB';
+  return (b / 1073741824).toFixed(2) + ' GB';
+}
+
+function fmtTime(ts) {
+  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function fileIcon(mime) {
+  if (!mime) return '📄';
+  if (mime.startsWith('image/')) return '🖼️';
+  if (mime.startsWith('video/')) return '🎬';
+  if (mime.startsWith('audio/')) return '🎵';
+  if (mime.includes('pdf'))      return '📑';
+  if (/zip|rar|7z|tar|gz/.test(mime)) return '📦';
+  if (mime.startsWith('text/'))  return '📝';
+  return '📄';
+}
+
+function isURL(s) {
+  try { const u = new URL(s); return /^https?:/.test(u.protocol); }
+  catch { return false; }
+}
+
+// ─── Room code ────────────────────────────────────────────────────────────────
+function genCode() {
+  return Array.from({ length: 6 }, () => ALPHA[Math.floor(Math.random() * ALPHA.length)]).join('');
+}
+
+function copyCode() {
+  const text = room || '';
+  navigator.clipboard?.writeText(text).then(() => toast('✓ Code copied!')).catch(() => fallbackCopy(text));
+}
+
+function fallbackCopy(text) {
+  const el = Object.assign(document.createElement('textarea'), { value: text });
+  el.style.cssText = 'position:fixed;opacity:0';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  toast('✓ Copied!');
+}
+
+// ─── QR code ──────────────────────────────────────────────────────────────────
+function buildQR(code) {
+  const wrap = $('qr-wrap');
+  wrap.innerHTML = '';
+  const url = `${location.href.split('?')[0]}?room=${code}`;
+  try {
+    new QRCode(wrap, {
+      text: url, width: 176, height: 176,
+      colorDark: '#22d3ee', colorLight: '#0f1629',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch {
+    wrap.innerHTML = `<p style="color:var(--muted);font-size:12px;text-align:center;padding:16px">QR unavailable<br><small>${esc(url)}</small></p>`;
+  }
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function createRoom() {
+  room = genCode();
+  $('disp-code').textContent = room;
+  buildQR(room);
+  show('waiting');
+  connectSignal(room);
+}
+
+function showJoin() {
+  $('join-in').value = '';
+  show('join');
+  setTimeout(() => $('join-in').focus(), 80);
+}
+
+function joinRoom() {
+  const code = ($('join-in').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (code.length < 6) { toast('Enter the full 6-character code'); return; }
+  room = code;
+  $('conn-msg').textContent = `Joining room ${room}…`;
+  show('connecting');
+  connectSignal(room);
+}
+
+function goHome() {
+  teardown();
+  show('home');
+}
+
+// ─── Signaling ────────────────────────────────────────────────────────────────
+function connectSignal(roomCode) {
+  if (SIGNAL_URL.includes('CHANGE_ME') || SIGNAL_URL.includes('YOUR_')) {
+    toast('⚠️ Signaling server not configured — see setup instructions', 5000);
+    return;
+  }
+
+  try {
+    ws = new WebSocket(`${SIGNAL_URL}?room=${roomCode}`);
+  } catch {
+    toast('⚠️ Invalid signaling URL');
+    goHome();
+    return;
+  }
+
+  ws.onopen = () => {
+    console.log('[signal] connected');
+    // Start connection timeout — if WebRTC isn't open in 45s, give up
+    clearTimeout(connTimer);
+    connTimer = setTimeout(() => {
+      if (dc?.readyState !== 'open') {
+        toast('Connection timed out — check that both devices are online', 5000);
+        goHome();
+      }
+    }, 45000);
+  };
+
+  ws.onmessage = ({ data }) => {
+    try { handleSignal(JSON.parse(data)); } catch (e) { console.error('[signal] parse', e); }
+  };
+
+  ws.onclose = (e) => {
+    if (e.code !== 1000 && dc?.readyState !== 'open') {
+      // Signaling closed unexpectedly before P2P established
+      if (e.code === 1008 && e.reason === 'Room full') {
+        toast('⚠️ Room is full (max 2 devices)');
+      } else if (document.querySelector('#s-waiting.on, #s-join.on, #s-connecting.on')) {
+        toast('⚠️ Signaling server unavailable — is it deployed?', 4000);
+      }
+    }
+  };
+
+  ws.onerror = () => {
+    if (dc?.readyState !== 'open') {
+      toast('⚠️ Cannot reach signaling server', 4000);
+      goHome();
+    }
+  };
+}
+
+function signalSend(obj) {
+  if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+}
+
+function handleSignal(msg) {
+  switch (msg.type) {
+    case 'joined':
+      role = msg.role;
+      console.log('[signal] joined as', role);
+      if (role === 'guest') {
+        $('conn-msg').textContent = 'Waiting for host…';
+        show('connecting');
+        initPeer(false);
+      }
+      break;
+
+    case 'peer-joined':
+      if (role === 'host') {
+        $('conn-msg').textContent = 'Peer found — connecting…';
+        show('connecting');
+        initPeer(true);
+      }
+      break;
+
+    case 'offer':
+      handleOffer(msg.sdp);
+      break;
+
+    case 'answer':
+      pc?.setRemoteDescription(msg.sdp)
+        .then(flushIceQueue)
+        .catch(console.error);
+      break;
+
+    case 'ice':
+      if (msg.candidate) {
+        if (pc?.remoteDescription) {
+          pc.addIceCandidate(msg.candidate).catch(() => {});
+        } else {
+          iceQueue.push(msg.candidate);
+        }
+      }
+      break;
+
+    case 'peer-left':
+      if (dc?.readyState !== 'open') {
+        toast('Peer left the room');
+        goHome();
+      }
+      break;
+
+    case 'error':
+      toast(`⚠️ ${msg.message}`);
+      goHome();
+      break;
+  }
+}
+
+async function flushIceQueue() {
+  for (const c of iceQueue) {
+    await pc?.addIceCandidate(c).catch(() => {});
+  }
+  iceQueue = [];
+}
+
+// ─── WebRTC ───────────────────────────────────────────────────────────────────
+function initPeer(initiator) {
+  pc = new RTCPeerConnection(ICE_CFG);
+
+  pc.onicecandidate = ({ candidate }) => {
+    if (candidate) signalSend({ type: 'ice', candidate });
+  };
+
+  pc.onconnectionstatechange = () => {
+    console.log('[rtc] state:', pc.connectionState);
+    if (pc.connectionState === 'failed') {
+      toast('Connection failed — try again', 4000);
+      goHome();
+    }
+    if (['disconnected', 'closed'].includes(pc.connectionState)) {
+      onPeerLeft();
+    }
+  };
+
+  if (initiator) {
+    dc = pc.createDataChannel('drop', { ordered: true });
+    setupDC(dc);
+    pc.createOffer()
+      .then(o => pc.setLocalDescription(o))
+      .then(() => signalSend({ type: 'offer', sdp: pc.localDescription }))
+      .catch(console.error);
+  } else {
+    pc.ondatachannel = ({ channel }) => {
+      dc = channel;
+      setupDC(dc);
+    };
+  }
+}
+
+async function handleOffer(sdp) {
+  if (!pc) initPeer(false);
+  await pc.setRemoteDescription(sdp);
+  await flushIceQueue();
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  signalSend({ type: 'answer', sdp: pc.localDescription });
+}
+
+function setupDC(ch) {
+  ch.binaryType = 'arraybuffer';
+  ch.bufferedAmountLowThreshold = 524288; // 512 KB
+
+  ch.onopen  = onP2POpen;
+  ch.onclose = onPeerLeft;
+  ch.onerror = e => console.error('[dc] error', e);
+  ch.onmessage = ({ data }) => {
+    if (typeof data === 'string') {
+      try { handleMsg(JSON.parse(data)); } catch {}
+    } else {
+      handleChunk(data);
+    }
+  };
+}
+
+function onP2POpen() {
+  console.log('[dc] open');
+  clearTimeout(connTimer);
+  // Close signaling — no longer needed
+  ws?.close(1000, 'p2p ready');
+  ws = null;
+  $('s-room').textContent = room;
+  transfers.clear();
+  clips = [];
+  show('connected');
+  renderT();
+  renderC();
+}
+
+function onPeerLeft() {
+  if (document.querySelector('#s-connected.on')) {
+    show('disconnected');
+    teardown(false); // don't navigate
+  } else if (!document.querySelector('#s-home.on, #s-disconnected.on')) {
+    goHome();
+  }
+}
+
+// ─── Data channel protocol ────────────────────────────────────────────────────
+function handleMsg(msg) {
+  switch (msg.type) {
+    case 'file-start':
+      recvCtx = { id: msg.id, name: msg.name, size: msg.size, mime: msg.mime, chunks: [], got: 0, ts: Date.now() };
+      addT({ ...recvCtx, dir: 'recv', status: 'active', prog: 0 });
+      break;
+
+    case 'file-end':
+      if (recvCtx?.id === msg.id) {
+        const blob = new Blob(recvCtx.chunks, { type: recvCtx.mime });
+        const url  = URL.createObjectURL(blob);
+        updT(msg.id, { status: 'done', prog: 1, url });
+        toast(`✓ ${recvCtx.name} received!`);
+        recvCtx = null;
+      }
+      break;
+
+    case 'clip':
+      clips.unshift({ ...msg, dir: 'recv' });
+      renderC();
+      toast('📋 Text received!');
+      break;
+  }
+}
+
+function handleChunk(data) {
+  if (!recvCtx) return;
+  recvCtx.chunks.push(data);
+  recvCtx.got += data.byteLength;
+  updT(recvCtx.id, { prog: recvCtx.got / recvCtx.size });
+}
+
+// ─── File sending ─────────────────────────────────────────────────────────────
+function onFilePick(e) {
+  Array.from(e.target.files).forEach(f => enqueue(f));
+  e.target.value = '';
+  drainQ();
+}
+
+function enqueue(file) {
+  const id = Math.random().toString(36).slice(2, 10);
+  sendQ.push({ id, file });
+  addT({ id, name: file.name, size: file.size, mime: file.type, dir: 'send', status: 'pending', prog: 0, ts: Date.now() });
+}
+
+async function drainQ() {
+  if (sending || !sendQ.length || dc?.readyState !== 'open') return;
+  sending = true;
+  while (sendQ.length) {
+    const { id, file } = sendQ.shift();
+    await sendFile(id, file);
+  }
+  sending = false;
+}
+
+async function sendFile(id, file) {
+  updT(id, { status: 'active', prog: 0 });
+  dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, size: file.size, mime: file.type }));
+
+  const buf = await file.arrayBuffer();
+  let offset = 0;
+
+  while (offset < buf.byteLength) {
+    if (dc.readyState !== 'open') return;
+
+    while (dc.bufferedAmount > MAX_BUF) {
+      await new Promise(r => {
+        dc.onbufferedamountlow = r;
+        setTimeout(r, 50); // safety fallback
+      });
+    }
+
+    const end   = Math.min(offset + CHUNK, buf.byteLength);
+    const chunk = buf.slice(offset, end);
+    dc.send(chunk);
+    offset = end;
+    updT(id, { prog: offset / file.size });
+  }
+
+  dc.send(JSON.stringify({ type: 'file-end', id }));
+  updT(id, { status: 'done', prog: 1 });
+  toast(`✓ ${file.name} sent!`);
+}
+
+// ─── Drag & drop ──────────────────────────────────────────────────────────────
+(function () {
+  const dz = $('dz');
+  if (!dz) return;
+  ['dragenter', 'dragover'].forEach(ev =>
+    dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev =>
+    dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('over'); }));
+  dz.addEventListener('drop', e => {
+    Array.from(e.dataTransfer.files).forEach(f => enqueue(f));
+    drainQ();
+  });
+})();
+
+// ─── Transfers UI ─────────────────────────────────────────────────────────────
+function addT(t) {
+  transfers.set(t.id, { ...t });
+  renderT();
+}
+
+function updT(id, patch) {
+  const t = transfers.get(id);
+  if (!t) return;
+  Object.assign(t, patch);
+
+  // Fast in-place update for progress — avoid full re-render during transfer
+  const el = qs(`[data-tid="${id}"]`);
+  if (!el) { renderT(); return; }
+
+  if ('prog' in patch) {
+    const fill = el.querySelector('.prog-fill');
+    if (fill) fill.style.width = `${(t.prog * 100).toFixed(0)}%`;
+    const badge = el.querySelector('.badge');
+    if (badge && t.status === 'active') badge.textContent = `${(t.prog * 100).toFixed(0)}%`;
+  }
+
+  if (patch.status === 'done') renderT();
+}
+
+function renderT() {
+  const el = $('tlist');
+  if (!el) return;
+  if (!transfers.size) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+
+  el.innerHTML = [...transfers.values()]
+    .sort((a, b) => b.ts - a.ts)
+    .map(t => {
+      const pct  = Math.round((t.prog || 0) * 100);
+      const done = t.status === 'done';
+      const send = t.dir === 'send';
+      const bCls = done ? 'b-done' : t.status === 'pending' ? 'b-q' : send ? 'b-send' : 'b-recv';
+      const bTxt = done ? '✓ Done' : t.status === 'pending' ? 'Queued' : `${pct}%`;
+
+      let acts = '';
+      if (done && t.url) {
+        acts += `<a href="${esc(t.url)}" download="${esc(t.name)}" class="btn btn-p btn-sm">Save</a>`;
+        if (/^(image|video|audio)\//.test(t.mime))
+          acts += `<a href="${esc(t.url)}" target="_blank" rel="noopener" class="btn btn-s btn-sm">View</a>`;
+      }
+
+      return `<div class="ti" data-tid="${esc(t.id)}">
+        <div class="ti-head">
+          <span class="ti-icon">${fileIcon(t.mime)}</span>
+          <span class="ti-name" title="${esc(t.name)}">${esc(t.name)}</span>
+          <span class="badge ${bCls}">${bTxt}</span>
+        </div>
+        ${!done ? `<div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div>` : ''}
+        <div class="ti-meta">
+          <span>${fmtSize(t.size)}</span>
+          <span>${send ? '↑ Sending' : '↓ Receiving'}</span>
+        </div>
+        ${acts ? `<div class="ti-acts">${acts}</div>` : ''}
+      </div>`;
+    }).join('');
+}
+
+// ─── Clipboard ────────────────────────────────────────────────────────────────
+function sendClip() {
+  const el      = $('clip-in');
+  const content = el.value.trim();
+  if (!content) { toast('Nothing to send'); return; }
+  if (dc?.readyState !== 'open') { toast('Not connected'); return; }
+
+  const clip = { type: 'clip', id: Math.random().toString(36).slice(2, 10), content, ts: Date.now() };
+  dc.send(JSON.stringify(clip));
+  clips.unshift({ ...clip, dir: 'sent' });
+  renderC();
+  el.value = '';
+  toast('📋 Text sent!');
+}
+
+function copyClip(content) {
+  navigator.clipboard?.writeText(content).then(() => toast('✓ Copied!')).catch(() => fallbackCopy(content));
+}
+
+function renderC() {
+  const el = $('clist');
+  if (!el) return;
+  el.innerHTML = clips.map(c => {
+    const link = isURL(c.content);
+    return `<div class="ci">
+      <div class="ci-head">
+        <span class="ci-dir ${c.dir === 'sent' ? 'dir-s' : 'dir-r'}">${c.dir === 'sent' ? '↑ Sent' : '↓ Received'}</span>
+        <span class="ci-time">${fmtTime(c.ts)}</span>
+      </div>
+      <div class="ci-body">${link ? `<a href="${esc(c.content)}" target="_blank" rel="noopener">${esc(c.content)}</a>` : esc(c.content)}</div>
+      <div class="ci-acts">
+        <button class="btn btn-s btn-sm" onclick="copyClip(${JSON.stringify(c.content)})">Copy</button>
+        ${link ? `<a href="${esc(c.content)}" target="_blank" rel="noopener" class="btn btn-g btn-sm">Open</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── Teardown ─────────────────────────────────────────────────────────────────
+function teardown(navigate = true) {
+  clearTimeout(connTimer);
+  dc?.close();   dc = null;
+  pc?.close();   pc = null;
+  ws?.close();   ws = null;
+  room = null; role = null;
+  transfers.clear(); clips = [];
+  sendQ = []; sending = false;
+  recvCtx = null; iceQueue = [];
+}
+
+// ─── Auto-join from URL param ──────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  const r = new URLSearchParams(location.search).get('room')?.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (r?.length === 6) {
+    room = r;
+    $('join-in').value = r;
+    $('conn-msg').textContent = `Joining room ${r}…`;
+    show('connecting');
+    connectSignal(r);
+  } else {
+    show('home');
+  }
+});
+</script>
+</body>
+</html>
