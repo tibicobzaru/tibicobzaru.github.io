@@ -403,17 +403,29 @@ const ICE_CFG = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
-    // Free public TURN relay — fallback when direct/STUN path fails (e.g. different networks, AP isolation)
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    // Free public TURN relays — fallback for NAT traversal across different networks
     {
       urls: [
         'turn:openrelay.metered.ca:80',
         'turn:openrelay.metered.ca:443',
         'turn:openrelay.metered.ca:443?transport=tcp',
       ],
-      username: 'openrelayproject',
+      username:   'openrelayproject',
       credential: 'openrelayproject',
     },
-  ]
+    {
+      urls: [
+        'turn:relay.metered.ca:80',
+        'turn:relay.metered.ca:443',
+        'turn:relay.metered.ca:443?transport=tcp',
+      ],
+      username:   'e8dd65bff0a7a119a2d87498',
+      credential: 'uMSvpBzR+RI4DYXU',
+    },
+  ],
+  iceCandidatePoolSize: 10,
 };
 
 const CHUNK     = 65536;        // 64 KB send chunk size
@@ -571,14 +583,14 @@ function connectSignal(roomCode) {
 
   ws.onopen = () => {
     console.log('[signal] connected');
-    // Start connection timeout — if WebRTC isn't open in 45s, give up
+    // Start connection timeout — if WebRTC isn't open in 90s, give up
     clearTimeout(connTimer);
     connTimer = setTimeout(() => {
       if (dc?.readyState !== 'open') {
         toast('Connection timed out — check that both devices are online', 5000);
         goHome();
       }
-    }, 45000);
+    }, 90000);
   };
 
   ws.onmessage = ({ data }) => {
