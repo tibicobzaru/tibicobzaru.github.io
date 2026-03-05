@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src wss://localdrop-bx2n.onrender.com stun: turns:; img-src 'self' data: blob:; media-src blob:; object-src 'none'; base-uri 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src wss://localdrop-bx2n.onrender.com; img-src 'self' data: blob:; media-src blob:; object-src 'none'; base-uri 'none';">
   <title>LocalDrop — P2P Transfer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -355,6 +355,16 @@ const ICE_CFG = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
+    // Free public TURN relay — fallback when direct/STUN path fails (e.g. different networks, AP isolation)
+    {
+      urls: [
+        'turn:openrelay.metered.ca:80',
+        'turn:openrelay.metered.ca:443',
+        'turn:openrelay.metered.ca:443?transport=tcp',
+      ],
+      username: 'openrelayproject',
+      credential: 'openrelayproject',
+    },
   ]
 };
 
@@ -619,10 +629,23 @@ function initPeer(initiator) {
     if (candidate) signalSend({ type: 'ice', candidate });
   };
 
+  pc.oniceconnectionstatechange = () => {
+    const s = pc.iceConnectionState;
+    console.log('[ice]', s);
+    const msgEl = $('conn-msg');
+    if (s === 'checking')   msgEl && (msgEl.textContent = 'Testing connection paths…');
+    if (s === 'connected' || s === 'completed') msgEl && (msgEl.textContent = 'Almost there…');
+    if (s === 'failed') {
+      toast('⚠️ Could not reach the other device — trying TURN relay…', 3000);
+      // Trigger ICE restart to retry via TURN
+      if (pc.restartIce) pc.restartIce();
+    }
+  };
+
   pc.onconnectionstatechange = () => {
-    console.log('[rtc] state:', pc.connectionState);
+    console.log('[rtc]', pc.connectionState);
     if (pc.connectionState === 'failed') {
-      toast('Connection failed — try again', 4000);
+      toast('❌ Connection failed — make sure both devices are online and try again', 5000);
       goHome();
     }
     if (['disconnected', 'closed'].includes(pc.connectionState)) {
