@@ -1,7 +1,9 @@
-// pwa-install.js — registers the service worker + shows a small "Get as PWA" banner
+// pwa-install.js — registers the service worker, shows "Get as PWA" when
+// installable, or "Open App" when already installed.
 
 (function () {
   const DISMISS_KEY = 'pwa-banner-dismissed';
+  const START_URL = '/?source=pwa';
   let deferredPrompt = null;
 
   // --- Register service worker ---
@@ -13,7 +15,7 @@
     });
   }
 
-  // Already installed / running standalone? Never show the banner.
+  // Running inside the installed app already? Nothing to show.
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
     window.navigator.standalone === true;
@@ -21,18 +23,24 @@
   if (isStandalone) return;
   if (sessionStorage.getItem(DISMISS_KEY) === '1') return;
 
-  // --- Build the banner markup ---
-  function buildBanner() {
+  // iOS (any browser: Safari, Chrome, etc. — they're all WebKit under the hood
+  // and share the same lack of beforeinstallprompt support)
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  // --- Shared banner shell ---
+  function createBanner({ text, sub, btnLabel, onBtnClick }) {
     const banner = document.createElement('div');
     banner.className = 'pwa-banner';
     banner.id = 'pwaBanner';
     banner.innerHTML = `
       <img src="img/logo.jpg" alt="" class="pwa-banner-icon">
       <span class="pwa-banner-text">
-        Get as PWA
-        <span class="pwa-banner-sub">Install for offline access</span>
+        ${text}
+        <span class="pwa-banner-sub">${sub}</span>
       </span>
-      <button class="pwa-banner-btn" id="pwaInstallBtn">Install</button>
+      <button class="pwa-banner-btn" id="pwaActionBtn">${btnLabel}</button>
       <button class="pwa-banner-close" id="pwaCloseBtn" aria-label="Dismiss">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -47,18 +55,67 @@
       dismissBanner(banner);
     });
 
-    document.getElementById('pwaInstallBtn').addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      dismissBanner(banner);
-      if (outcome === 'accepted') {
-        console.log('PWA installed');
-      }
+    document.getElementById('pwaActionBtn').addEventListener('click', () => {
+      onBtnClick(banner);
     });
 
     return banner;
+  }
+
+  function buildInstallBanner() {
+    createBanner({
+      text: 'Get as PWA',
+      sub: 'Install for offline access',
+      btnLabel: 'Install',
+      onBtnClick: async (banner) => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        dismissBanner(banner);
+        if (outcome === 'accepted') {
+          console.log('PWA installed');
+        }
+      }
+    });
+  }
+
+  function buildOpenBanner() {
+    createBanner({
+      text: 'Already installed',
+      sub: 'Reopen it from your device',
+      btnLabel: 'Open App',
+      onBtnClick: () => {
+        // Best effort: if the OS/browser is set to hand this URL off to the
+        // installed app, it will open there. Otherwise this just navigates
+        // the current tab as a harmless fallback.
+        window.location.href = START_URL;
+      }
+    });
+  }
+
+  function buildIOSBanner() {
+    createBanner({
+      text: 'Get as PWA',
+      sub: 'Tap Share, then More \u2192 Add to Home Screen',
+      btnLabel: 'Share',
+      onBtnClick: async () => {
+        // Confirmed: on iOS this sheet does include "Add to Home Screen",
+        // just nested under "More" in the actions list rather than the
+        // top row. The visible instructions above cover that extra tap.
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: document.title,
+              url: window.location.origin + '/'
+            });
+          } catch (err) {
+            // User cancelled, or share unsupported for this call — no-op.
+            // The instructional text stays visible either way.
+          }
+        }
+      }
+    });
   }
 
   function dismissBanner(banner) {
@@ -67,14 +124,40 @@
     setTimeout(() => banner.remove(), 500);
   }
 
-  // Chrome/Edge/Android: fires when the browser decides the site is installable
-  window.addEventListener('beforeinstallprompt', (event) => {
-    event.preventDefault();
-    deferredPrompt = event;
-    buildBanner();
-  });
+  // --- Decide which banner (if any) to show ---
+  async function init() {
+    // iOS: no beforeinstallprompt, no getInstalledRelatedApps — just show
+    // instructions, with a best-effort Share button attempt.
+    if (isIOS) {
+      buildIOSBanner();
+      return;
+    }
 
-  // If the app gets installed, clean up
+    // Check if this PWA is already installed (Chrome/Edge on Android + desktop).
+    // Requires the self-referencing "related_applications" entry in manifest.json.
+    if ('getInstalledRelatedApps' in navigator) {
+      try {
+        const relatedApps = await navigator.getInstalledRelatedApps();
+        if (relatedApps.length > 0) {
+          buildOpenBanner();
+          return; // don't also listen for beforeinstallprompt
+        }
+      } catch (err) {
+        console.warn('getInstalledRelatedApps failed:', err);
+      }
+    }
+
+    // Not detected as installed (or detection unsupported) — offer install.
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredPrompt = event;
+      buildInstallBanner();
+    });
+  }
+
+  init();
+
+  // If the app gets installed during this visit, clean up
   window.addEventListener('appinstalled', () => {
     sessionStorage.setItem(DISMISS_KEY, '1');
     const existing = document.getElementById('pwaBanner');
