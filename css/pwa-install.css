@@ -1,0 +1,108 @@
+/* pwa-install.css — small "Get as PWA" install banner */
+
+.pwa-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translate(-50%, 120%);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 16px;
+  background: rgba(15, 15, 20, 0.92);
+  border: 1px solid rgba(232, 98, 26, 0.35);
+  border-radius: 999px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  font-family: 'Outfit', sans-serif;
+  transition: transform 0.45s cubic-bezier(.16,1,.3,1), opacity 0.45s ease;
+  opacity: 0;
+  max-width: 90vw;
+}
+
+.pwa-banner.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.pwa-banner-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pwa-banner-text {
+  color: #f2f2f2;
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pwa-banner-sub {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: #9a9a9a;
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.pwa-banner-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0b0b0f;
+  background: #e8621a;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.pwa-banner-btn:hover {
+  background: #ff7a2e;
+  transform: translateY(-1px);
+}
+
+.pwa-banner-close {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #777;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.pwa-banner-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 480px) {
+  .pwa-banner {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    transform: translateY(120%);
+    width: auto;
+    max-width: none;
+  }
+  .pwa-banner.show {
+    transform: translateY(0);
+  }
+  .pwa-banner-text {
+    white-space: normal;
+  }
+}
