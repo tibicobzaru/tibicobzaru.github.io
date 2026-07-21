@@ -97,23 +97,13 @@
   function buildIOSBanner() {
     createBanner({
       text: 'Get as PWA',
-      sub: 'Tap Share, then More \u2192 Add to Home Screen',
-      btnLabel: 'Share',
-      onBtnClick: async () => {
-        // Confirmed: on iOS this sheet does include "Add to Home Screen",
-        // just nested under "More" in the actions list rather than the
-        // top row. The visible instructions above cover that extra tap.
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: document.title,
-              url: window.location.origin + '/'
-            });
-          } catch (err) {
-            // User cancelled, or share unsupported for this call — no-op.
-            // The instructional text stays visible either way.
-          }
-        }
+      sub: '1. Share \u2192 2. View More \u2192 3. Add to Home Screen',
+      btnLabel: 'Got it',
+      onBtnClick: (banner) => {
+        // No JS action can open the browser's own toolbar Share sheet —
+        // that's the only sheet with "Add to Home Screen" on iOS. This
+        // button is just a friendly dismiss once the person has read it.
+        dismissBanner(banner);
       }
     });
   }
@@ -127,7 +117,7 @@
   // --- Decide which banner (if any) to show ---
   async function init() {
     // iOS: no beforeinstallprompt, no getInstalledRelatedApps — just show
-    // instructions, with a best-effort Share button attempt.
+    // instructions pointing at the browser's own toolbar Share icon.
     if (isIOS) {
       buildIOSBanner();
       return;
