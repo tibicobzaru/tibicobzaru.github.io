@@ -3,7 +3,6 @@
 
 (function () {
   const DISMISS_KEY = 'pwa-banner-dismissed';
-  const START_URL = '/?source=pwa';
   let deferredPrompt = null;
 
   // --- Register service worker ---
@@ -83,13 +82,15 @@
   function buildOpenBanner() {
     createBanner({
       text: 'Already installed',
-      sub: 'Reopen it from your device',
-      btnLabel: 'Open App',
-      onBtnClick: () => {
-        // Best effort: if the OS/browser is set to hand this URL off to the
-        // installed app, it will open there. Otherwise this just navigates
-        // the current tab as a harmless fallback.
-        window.location.href = START_URL;
+      sub: 'Check your home screen or app drawer',
+      btnLabel: 'Got it',
+      onBtnClick: (banner) => {
+        // There's no web API that can force Android to hand off to the
+        // separately-installed WebAPK from inside an existing browser tab —
+        // that hand-off only happens when Android intercepts a link tap
+        // from outside the browser (deliberate OS security boundary).
+        // So this is just a dismiss, not an action button.
+        dismissBanner(banner);
       }
     });
   }
