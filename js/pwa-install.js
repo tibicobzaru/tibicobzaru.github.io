@@ -63,7 +63,7 @@
 
   function buildInstallBanner() {
     createBanner({
-      text: 'Get as PWA',
+      text: 'Get as web app',
       sub: 'Install for offline access',
       btnLabel: 'Install',
       onBtnClick: async (banner) => {
@@ -82,7 +82,7 @@
   function buildOpenBanner() {
     createBanner({
       text: 'Already installed',
-      sub: 'Check your home screen or app drawer',
+      sub: 'Tap \u22ee \u2192 Open in app (or check your app drawer)',
       btnLabel: 'Got it',
       onBtnClick: (banner) => {
         // There's no web API that can force Android to hand off to the
@@ -97,7 +97,7 @@
 
   function buildIOSBanner() {
     createBanner({
-      text: 'Get as PWA',
+      text: 'Get as web app',
       sub: '1. Share \u2192 2. View More \u2192 3. Add to Home Screen',
       btnLabel: 'Got it',
       onBtnClick: (banner) => {
