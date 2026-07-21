@@ -1,5 +1,5 @@
 // sw.js — vanilla service worker, no third-party libs
-const CACHE_NAME = 'tibicobzaru-v1';
+const CACHE_NAME = 'tibicobzaru-v2';
 
 // Core shell assets, cached on install
 const PRECACHE_ASSETS = [
