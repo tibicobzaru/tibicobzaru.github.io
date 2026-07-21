@@ -19,7 +19,7 @@
     window.navigator.standalone === true;
 
   if (isStandalone) return;
-  if (localStorage.getItem(DISMISS_KEY) === '1') return;
+  if (sessionStorage.getItem(DISMISS_KEY) === '1') return;
 
   // --- Build the banner markup ---
   function buildBanner() {
@@ -63,7 +63,7 @@
 
   function dismissBanner(banner) {
     banner.classList.remove('show');
-    localStorage.setItem(DISMISS_KEY, '1');
+    sessionStorage.setItem(DISMISS_KEY, '1');
     setTimeout(() => banner.remove(), 500);
   }
 
@@ -76,7 +76,7 @@
 
   // If the app gets installed, clean up
   window.addEventListener('appinstalled', () => {
-    localStorage.setItem(DISMISS_KEY, '1');
+    sessionStorage.setItem(DISMISS_KEY, '1');
     const existing = document.getElementById('pwaBanner');
     if (existing) existing.remove();
   });
