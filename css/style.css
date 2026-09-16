@@ -361,9 +361,44 @@ font-size: clamp(8rem, 38vw, 14rem);
 right: -0.5rem;
 }
 /* press band: match the hero gutter, let the label take its own line */
-.press-band{padding:.6rem 1.5rem;gap:.5rem .7rem;}
-.pb-label{width:100%;}
-.pb-sub{white-space:normal;}
+#top{
+  grid-template-columns:1fr;
+  min-height:auto;
+  padding:1.5rem 1.5rem 4rem;
+  align-items:center;
+}
+ 
+.press-band{
+  padding:.65rem 1.5rem;
+  gap:.5rem;
+  /* stack label above pills rather than sitting side by side */
+  flex-direction:column;
+  align-items:flex-start;
+.press-band{max-width:100vw;overflow:hidden;}
+.pb-item{max-width:100%;}
+.pb-txt{overflow-wrap:anywhere;}
+}
+ 
+/* label: both lines allowed to wrap, stacked not inline */
+.pb-label{
+  width:100%;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:.25rem;
+}
+.pb-kicker{white-space:normal;}
+.pb-sub{white-space:normal;line-height:1.55;}
+ 
+/* pills: outlet name only. The full headline stays in each link's
+   title attribute. Showing headlines here costs ~210px of band. */
+.pb-list{width:100%;gap:.35rem;}
+.pb-item{
+  white-space:normal;        /* THE BUG — this was missing */
+  padding:.3rem .6rem;
+}
+.pb-txt{display:none;}
+.pb-mark{font-size:.72rem;}
+ 
 }
 
 a.proof-link,
